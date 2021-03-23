@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TravelBuddy.Models;
 
 namespace TravelBuddy.Data
 {
@@ -18,5 +19,7 @@ namespace TravelBuddy.Data
             base.OnModelCreating(builder);
             builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Customer", NormalizedName = "CUSTOMER" });
         }
+        public DbSet<Traveler>Travelers { get; set; }
+        public DbSet<Day>Days { get; set; }
     }
 }
