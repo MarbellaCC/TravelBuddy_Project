@@ -26,15 +26,14 @@ namespace TravelBuddy.Controllers
         }
 
         // GET: Days/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var day = await _context.Days
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var day = _context.Days.Find(id);
             if (day == null)
             {
                 return NotFound();
@@ -66,14 +65,14 @@ namespace TravelBuddy.Controllers
         }
 
         // GET: Days/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var day = await _context.Days.FindAsync(id);
+            var day = _context.Days.Find(id);
             if (day == null)
             {
                 return NotFound();
@@ -86,7 +85,7 @@ namespace TravelBuddy.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RestaurantMaxDistance,AdventureMaxDistance,TypeOfRestaurant,TypeOfAdventure,Time")] Day day)
+        public ActionResult Edit(int id, Day day)
         {
             if (id != day.Id)
             {
@@ -97,8 +96,13 @@ namespace TravelBuddy.Controllers
             {
                 try
                 {
-                    _context.Update(day);
-                    await _context.SaveChangesAsync();
+                    var dayToEdit = _context.Days.Find(id);
+                    dayToEdit.RestaurantMaxDistance = day.RestaurantMaxDistance;
+                    dayToEdit.AdventureMaxDistance = day.AdventureMaxDistance;
+                    dayToEdit.TypeOfRestaurant = day.TypeOfRestaurant;
+                    dayToEdit.TypeOfAdventure = day.TypeOfAdventure;
+                    _context.Update(dayToEdit);
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -111,7 +115,7 @@ namespace TravelBuddy.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Traveler");
             }
             return View(day);
         }
