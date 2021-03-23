@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TravelBuddy.Models.Traveler>
+﻿@model IEnumerable<TravelBuddy.Models.Day>
 
 @{
     ViewData["Title"] = "Index";
@@ -14,40 +14,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.DayId)
+                @Html.DisplayNameFor(model => model.RestaurantMaxDistance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FirstName)
+                @Html.DisplayNameFor(model => model.AdventureMaxDistance)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastName)
+                @Html.DisplayNameFor(model => model.TypeOfRestaurant)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Bio)
+                @Html.DisplayNameFor(model => model.TypeOfAdventure)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DestinationCity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationState)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DestinationCountry)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ZipCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.StartDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EndDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Lodging)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdentityUser)
+                @Html.DisplayNameFor(model => model.Time)
             </th>
             <th></th>
         </tr>
@@ -56,45 +35,23 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.DayId)
+                @Html.DisplayFor(modelItem => item.RestaurantMaxDistance)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
+                @Html.DisplayFor(modelItem => item.AdventureMaxDistance)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastName)
+                @Html.DisplayFor(modelItem => item.TypeOfRestaurant)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Bio)
+                @Html.DisplayFor(modelItem => item.TypeOfAdventure)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.DestinationCity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationState)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DestinationCountry)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ZipCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.StartDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Lodging)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdentityUser.Id)
+                @Html.DisplayFor(modelItem => item.Time)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
             </td>
         </tr>
 }
