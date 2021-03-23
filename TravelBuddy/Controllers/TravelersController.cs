@@ -69,6 +69,8 @@ namespace TravelBuddy.Controllers
         {
             if (ModelState.IsValid)
             {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                traveler.IdentityUserID = userId;
                 _context.Add(traveler);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -99,7 +101,7 @@ namespace TravelBuddy.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DayId,FirstName,LastName,Bio,DestinationCity,DestinationState,DestinationCountry,ZipCode,StartDate,EndDate,Lodging,IdentityUserID")] Traveler traveler)
+        public async Task<IActionResult> Edit(int id, Traveler traveler)
         {
             if (id != traveler.Id)
             {
@@ -110,7 +112,18 @@ namespace TravelBuddy.Controllers
             {
                 try
                 {
-                    _context.Update(traveler);
+                    Traveler travelerToEdit = _context.Travelers.Find(id);
+                    travelerToEdit.FirstName = traveler.FirstName;
+                    travelerToEdit.LastName = traveler.LastName;
+                    travelerToEdit.Bio = traveler.Bio;
+                    travelerToEdit.DestinationCity = traveler.DestinationCity;
+                    travelerToEdit.DestinationState = traveler.DestinationState;
+                    travelerToEdit.DestinationCountry = traveler.DestinationCountry;
+                    travelerToEdit.ZipCode = traveler.ZipCode;
+                    travelerToEdit.StartDate = traveler.StartDate;
+                    travelerToEdit.EndDate = traveler.EndDate;
+                    travelerToEdit.Lodging = traveler.Lodging;
+                    _context.Update(travelerToEdit);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -130,35 +143,35 @@ namespace TravelBuddy.Controllers
             return View(traveler);
         }
 
-        // GET: Travelers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Travelers/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var traveler = await _context.Travelers
-                .Include(t => t.IdentityUser)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (traveler == null)
-            {
-                return NotFound();
-            }
+        //    var traveler = await _context.Travelers
+        //        .Include(t => t.IdentityUser)
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (traveler == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(traveler);
-        }
+        //    return View(traveler);
+        //}
 
-        // POST: Travelers/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var traveler = await _context.Travelers.FindAsync(id);
-            _context.Travelers.Remove(traveler);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //// POST: Travelers/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var traveler = await _context.Travelers.FindAsync(id);
+        //    _context.Travelers.Remove(traveler);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         private bool TravelerExists(int id)
         {
