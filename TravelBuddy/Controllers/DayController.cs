@@ -97,10 +97,8 @@ namespace TravelBuddy.Controllers
                 try
                 {
                     var dayToEdit = _context.Days.Find(id);
-                    dayToEdit.RestaurantMaxDistance = day.RestaurantMaxDistance;
-                    dayToEdit.AdventureMaxDistance = day.AdventureMaxDistance;
-                    dayToEdit.TypeOfRestaurant = day.TypeOfRestaurant;
-                    dayToEdit.TypeOfAdventure = day.TypeOfAdventure;
+                    dayToEdit.Date = day.Date;
+                    dayToEdit.Name = day.Name;
                     _context.Update(dayToEdit);
                     _context.SaveChanges();
                 }

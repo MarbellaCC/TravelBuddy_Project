@@ -1,0 +1,65 @@
+﻿@model TravelBuddy.Models.Activity
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Activity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Time" class="control-label"></label>
+                <input asp-for="Time" class="form-control" />
+                <span asp-validation-for="Time" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlaceName" class="control-label"></label>
+                <input asp-for="PlaceName" class="form-control" />
+                <span asp-validation-for="PlaceName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Rating" class="control-label"></label>
+                <input asp-for="Rating" class="form-control" />
+                <span asp-validation-for="Rating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RestaurantMaxDistance" class="control-label"></label>
+                <input asp-for="RestaurantMaxDistance" class="form-control" />
+                <span asp-validation-for="RestaurantMaxDistance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdventureMaxDistance" class="control-label"></label>
+                <input asp-for="AdventureMaxDistance" class="form-control" />
+                <span asp-validation-for="AdventureMaxDistance" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeOfRestaurant" class="control-label"></label>
+                <input asp-for="TypeOfRestaurant" class="form-control" />
+                <span asp-validation-for="TypeOfRestaurant" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeOfAdventure" class="control-label"></label>
+                <input asp-for="TypeOfAdventure" class="form-control" />
+                <span asp-validation-for="TypeOfAdventure" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

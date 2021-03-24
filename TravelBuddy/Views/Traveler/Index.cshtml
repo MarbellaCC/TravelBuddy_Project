@@ -14,19 +14,10 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.RestaurantMaxDistance)
+                @Html.DisplayNameFor(model => model.Date)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AdventureMaxDistance)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeOfRestaurant)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TypeOfAdventure)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Time)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th></th>
         </tr>
@@ -35,19 +26,10 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.RestaurantMaxDistance)
+                @Html.DisplayFor(modelItem => item.Date)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AdventureMaxDistance)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfRestaurant)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfAdventure)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Time)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

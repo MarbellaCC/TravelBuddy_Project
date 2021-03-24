@@ -115,13 +115,11 @@ namespace TravelBuddy.Controllers
                     Traveler travelerToEdit = _context.Travelers.Find(id);
                     travelerToEdit.FirstName = traveler.FirstName;
                     travelerToEdit.LastName = traveler.LastName;
-                    travelerToEdit.Bio = traveler.Bio;
+                    travelerToEdit.Interests = traveler.Interests;
                     travelerToEdit.DestinationCity = traveler.DestinationCity;
                     travelerToEdit.DestinationState = traveler.DestinationState;
                     travelerToEdit.DestinationCountry = traveler.DestinationCountry;
                     travelerToEdit.ZipCode = traveler.ZipCode;
-                    travelerToEdit.StartDate = traveler.StartDate;
-                    travelerToEdit.EndDate = traveler.EndDate;
                     travelerToEdit.Lodging = traveler.Lodging;
                     _context.Update(travelerToEdit);
                     await _context.SaveChangesAsync();

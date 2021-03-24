@@ -14,29 +14,14 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="RestaurantMaxDistance" class="control-label"></label>
-                <input asp-for="RestaurantMaxDistance" class="form-control" />
-                <span asp-validation-for="RestaurantMaxDistance" class="text-danger"></span>
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AdventureMaxDistance" class="control-label"></label>
-                <input asp-for="AdventureMaxDistance" class="form-control" />
-                <span asp-validation-for="AdventureMaxDistance" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeOfRestaurant" class="control-label"></label>
-                <input asp-for="TypeOfRestaurant" class="form-control" />
-                <span asp-validation-for="TypeOfRestaurant" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TypeOfAdventure" class="control-label"></label>
-                <input asp-for="TypeOfAdventure" class="form-control" />
-                <span asp-validation-for="TypeOfAdventure" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Time" class="control-label"></label>
-                <input asp-for="Time" class="form-control" />
-                <span asp-validation-for="Time" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

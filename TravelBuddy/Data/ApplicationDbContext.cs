@@ -21,5 +21,6 @@ namespace TravelBuddy.Data
         }
         public DbSet<Traveler>Travelers { get; set; }
         public DbSet<Day>Days { get; set; }
+        public DbSet<Activity> Activities { get; set; }
     }
 }

@@ -7,10 +7,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelBuddy.Data;
 
-namespace TravelBuddy.Data.Migrations
+namespace TravelBuddy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210323150436_Migration1")]
+    [Migration("20210324184834_Migration1")]
     partial class Migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -50,8 +50,8 @@ namespace TravelBuddy.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "07e23804-94b1-46b1-a700-44d5d6eb7c3c",
-                            ConcurrencyStamp = "0dd8576d-c6a4-4933-a045-c6d51e03bc0b",
+                            Id = "b3fb551a-aca2-46bb-8ac9-43aa2fe963f7",
+                            ConcurrencyStamp = "224ba689-2ca7-43cf-933e-eb8af6e6fe54",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -226,7 +226,7 @@ namespace TravelBuddy.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TravelBuddy.Models.Day", b =>
+            modelBuilder.Entity("TravelBuddy.Models.Activity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,6 +235,12 @@ namespace TravelBuddy.Data.Migrations
 
                     b.Property<double?>("AdventureMaxDistance")
                         .HasColumnType("float");
+
+                    b.Property<string>("PlaceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
 
                     b.Property<double?>("RestaurantMaxDistance")
                         .HasColumnType("float");
@@ -250,6 +256,29 @@ namespace TravelBuddy.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Activities");
+                });
+
+            modelBuilder.Entity("TravelBuddy.Models.Day", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
                     b.ToTable("Days");
                 });
 
@@ -260,10 +289,7 @@ namespace TravelBuddy.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Bio")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("DayId")
+                    b.Property<int?>("DayId")
                         .HasColumnType("int");
 
                     b.Property<string>("DestinationCity")
@@ -275,14 +301,14 @@ namespace TravelBuddy.Data.Migrations
                     b.Property<string>("DestinationState")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("EndDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdentityUserID")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Interests")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -290,13 +316,12 @@ namespace TravelBuddy.Data.Migrations
                     b.Property<string>("Lodging")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("StartDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DayId");
 
                     b.HasIndex("IdentityUserID");
 
@@ -354,8 +379,19 @@ namespace TravelBuddy.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TravelBuddy.Models.Day", b =>
+                {
+                    b.HasOne("TravelBuddy.Models.Activity", "Activity")
+                        .WithMany()
+                        .HasForeignKey("ActivityId");
+                });
+
             modelBuilder.Entity("TravelBuddy.Models.Traveler", b =>
                 {
+                    b.HasOne("TravelBuddy.Models.Day", "Day")
+                        .WithMany()
+                        .HasForeignKey("DayId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserID");
