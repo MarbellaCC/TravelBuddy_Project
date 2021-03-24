@@ -11,11 +11,11 @@ using TravelBuddy.Models;
 
 namespace TravelBuddy.Controllers
 {
-    public class TravelersController : Controller
+    public class TravelerController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public TravelersController(ApplicationDbContext context)
+        public TravelerController(ApplicationDbContext context)
         {
             _context = context;
         }

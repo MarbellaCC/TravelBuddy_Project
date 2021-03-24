@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,16 +11,12 @@ namespace TravelBuddy.Models
     {
         [Key]
         public int Id { get; set; }
-        [Display(Name= "Restaurant Max Distane")]
-        public double? RestaurantMaxDistance { get; set; }
-        [Display(Name = "Adventure Max Distance")]
-        public double? AdventureMaxDistance { get; set; }
-        [Display(Name = "Type of Restaurant")]
-        public string TypeOfRestaurant { get; set; }
-        [Display(Name = "Type of Adventure")]
-        public string TypeOfAdventure { get; set; }
-        [DataType(DataType.Time)]
-        public DateTime? Time { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? Date { get; set; }
+        [ForeignKey("ActivityId")]
+        public int ActivityId { get; set; }
+        public Activity Activity { get; set; }
+       
 
     }
 }

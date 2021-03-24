@@ -22,7 +22,7 @@ namespace TravelBuddy.ActionFilters
             {
                 if (_claimsPrincipal.IsInRole("Customer"))
                 {
-                    context.Result = new RedirectToActionResult("Index", "Customers", null);
+                    context.Result = new RedirectToActionResult("Index", "Travelers", null);
                 }
             }
         }
