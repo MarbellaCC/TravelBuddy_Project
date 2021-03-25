@@ -35,12 +35,8 @@ namespace TravelBuddy.Controllers
         }
 
         // GET: Travelers/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
             //var traveler = await _context.Travelers.Include(t => t.IdentityUser).FirstOrDefaultAsync(m => m.Id == id);
             var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -51,6 +47,15 @@ namespace TravelBuddy.Controllers
             }
 
             return View(traveler);
+        }
+        public ActionResult DayDetails(int? id)
+        {
+            var day = _context.Days.Find(id);
+            if(day == null)
+            {
+                return NotFound();
+            }
+            return View(day);
         }
 
         // GET: Travelers/Create
@@ -164,6 +169,41 @@ namespace TravelBuddy.Controllers
             }
             ViewData["IdentityUserID"] = new SelectList(_context.Users, "Id", "Id", traveler.IdentityUserID);
             return View(traveler);
+        }
+        public ActionResult EditDay(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var day = _context.Days.Find(id);
+            if(day == null)
+            {
+                return NotFound();
+            }
+            return View(day);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditDay(int id, Day day)
+        {
+            if(id != day.Id)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    var dayToEdit = _context.Days.Find(id);
+                    dayToEdit.Date = day.Date;
+                    dayToEdit.Name = day.Name;
+                    _context.Update(dayToEdit);
+                    _context.SaveChanges();
+                    return RedirectToAction("DayDetails");
+                }
+            }
+            return View(day);
         }
 
         private bool TravelerExists(int id)
