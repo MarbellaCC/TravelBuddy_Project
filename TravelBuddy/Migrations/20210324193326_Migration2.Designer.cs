@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelBuddy.Data;
 
 namespace TravelBuddy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210324193326_Migration2")]
+    partial class Migration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,8 +50,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0db1d588-1a67-48db-beee-8436dacff287",
-                            ConcurrencyStamp = "45601da3-78aa-4363-8e3e-daa23eefaf52",
+                            Id = "1b27bc1d-d240-4c85-b72d-a7a34b432e95",
+                            ConcurrencyStamp = "9e0d226f-65ec-4210-801f-9e1ff10db8eb",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });

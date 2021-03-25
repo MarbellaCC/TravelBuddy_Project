@@ -12,7 +12,7 @@ namespace TravelBuddy.Models
     {
         [Key]
         public int Id { get; set; }
-        [ForeignKey("DayId")]
+        [ForeignKey("Day")]
         public int? DayId { get; set; }
         public Day Day { get; set; }
         [Display(Name = "First Name")]

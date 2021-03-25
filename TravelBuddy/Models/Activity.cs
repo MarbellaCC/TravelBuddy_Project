@@ -13,6 +13,7 @@ namespace TravelBuddy.Models
         [DataType(DataType.Time)]
         public DateTime? Time { get; set; }
         public string PlaceName { get; set; }
+        [Range(0,5)]
         public int Rating { get; set; }
         [Display(Name = "Restaurant Max Distane")]
         public double? RestaurantMaxDistance { get; set; }

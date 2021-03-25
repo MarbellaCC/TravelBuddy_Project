@@ -30,7 +30,7 @@ namespace TravelBuddy.Controllers
             {
                 return RedirectToAction("Create");
             }
-            var travelerDays = _context.Days.Where(d => d.Id == traveler.Id);
+            var travelerDays = _context.Days.Where(d => d.Id == traveler.DayId);
             return View(travelerDays);
         }
 
@@ -77,6 +77,31 @@ namespace TravelBuddy.Controllers
             }
             ViewData["IdentityUserID"] = new SelectList(_context.Users, "Id", "Id", traveler.IdentityUserID);
             return View(traveler);
+        }
+        public ActionResult CreateDay()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateDay(Day day)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                day.ActivityId = null;
+                _context.Days.Add(day);
+                _context.SaveChanges();
+                //traveler.Day = day;
+                //_context.Travelers.Update(traveler);
+                traveler.DayId = day.Id;
+                _context.Update(traveler);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(day);
         }
 
         // GET: Travelers/Edit/5
@@ -140,36 +165,6 @@ namespace TravelBuddy.Controllers
             ViewData["IdentityUserID"] = new SelectList(_context.Users, "Id", "Id", traveler.IdentityUserID);
             return View(traveler);
         }
-
-        //// GET: Travelers/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var traveler = await _context.Travelers
-        //        .Include(t => t.IdentityUser)
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (traveler == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(traveler);
-        //}
-
-        //// POST: Travelers/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var traveler = await _context.Travelers.FindAsync(id);
-        //    _context.Travelers.Remove(traveler);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         private bool TravelerExists(int id)
         {

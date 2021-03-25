@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -53,13 +54,16 @@ namespace TravelBuddy.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,RestaurantMaxDistance,AdventureMaxDistance,TypeOfRestaurant,TypeOfAdventure,Time")] Day day)
+        public async Task<IActionResult> Create(Day day)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(day);
+                var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+                _context.Days.Add(day);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Traveler");
             }
             return View(day);
         }

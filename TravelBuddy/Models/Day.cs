@@ -14,7 +14,7 @@ namespace TravelBuddy.Models
         [DataType(DataType.Date)]
         public DateTime? Date { get; set; }
         public string Name { get; set; }
-        [ForeignKey("ActivityId")]
+        [ForeignKey("Activity")]
         public int? ActivityId { get; set; }
         public Activity Activity { get; set; }
        
