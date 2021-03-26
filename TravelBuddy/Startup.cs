@@ -15,6 +15,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using TravelBuddy.ActionFilters;
 using TravelBuddy.Data;
+using TravelBuddy.Services;
 
 namespace TravelBuddy
 {
@@ -39,6 +40,7 @@ namespace TravelBuddy
             services.AddControllers(config => { config.Filters.Add(typeof(GlobalRouting)); });
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddTransient<GeocodingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

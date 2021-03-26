@@ -26,6 +26,8 @@ namespace TravelBuddy.Models
         [Display(Name = "Zip code")]
         public string ZipCode { get; set; }
         public string Lodging { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserID { get; set; }

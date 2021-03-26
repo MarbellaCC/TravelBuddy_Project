@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TravelBuddy.Data;
 using TravelBuddy.Models;
+using TravelBuddy.Services;
 
 namespace TravelBuddy.Controllers
 {
     public class TravelerController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly GeocodingService _geocodingSerice;
 
-        public TravelerController(ApplicationDbContext context)
+        public TravelerController(ApplicationDbContext context, GeocodingService geocodingService)
         {
             _context = context;
+            _geocodingSerice = geocodingService;
         }
 
         // GET: Travelers
@@ -76,7 +79,8 @@ namespace TravelBuddy.Controllers
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 traveler.IdentityUserID = userId;
-                _context.Add(traveler);
+                var travelerLatLong = await _geocodingSerice.GetGeocoding(traveler);
+                _context.Add(travelerLatLong);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -167,6 +171,9 @@ namespace TravelBuddy.Controllers
                     travelerToEdit.DestinationCountry = traveler.DestinationCountry;
                     travelerToEdit.ZipCode = traveler.ZipCode;
                     travelerToEdit.Lodging = traveler.Lodging;
+                    travelerToEdit.Latitude = traveler.Latitude;
+                    travelerToEdit.Longitude = traveler.Longitude;
+                    await _geocodingSerice.GetGeocoding(travelerToEdit);
                     _context.Update(travelerToEdit);
                     await _context.SaveChangesAsync();
                 }
