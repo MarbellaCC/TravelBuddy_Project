@@ -257,6 +257,62 @@ namespace TravelBuddy.Controllers
             }
             return View(activity);
         }
+        public async Task<IActionResult> DeleteDay(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var day = await _context.Days
+                .Include(d => d.Traveler)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (day == null)
+            {
+                return NotFound();
+            }
+
+            return View(day);
+        }
+
+        // POST: Days/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteDay(int id)
+        {
+            var day = await _context.Days.FindAsync(id);
+            _context.Days.Remove(day);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        public async Task<IActionResult> DeleteActivity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var activity = await _context.Activities
+                .Include(a => a.Day)
+                .FirstOrDefaultAsync(a => a.Id == id);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            return View(activity);
+        }
+
+        // POST: Days/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteActivity(int id)
+        {
+            var activity = await _context.Activities.FindAsync(id);
+            _context.Activities.Remove(activity);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(DayDetails));
+        }
         private bool TravelerExists(int id)
         {
             return _context.Travelers.Any(e => e.Id == id);
