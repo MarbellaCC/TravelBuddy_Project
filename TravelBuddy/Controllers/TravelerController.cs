@@ -221,7 +221,42 @@ namespace TravelBuddy.Controllers
             }
             return View(day);
         }
-
+        public ActionResult EditActivity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var activity = _context.Activities.Find(id);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+            return View(activity);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditActivity(int id, Activity activity)
+        {
+            if (id != activity.Id)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    var dayToEdit = _context.Activities.Find(id);
+                    dayToEdit.Time = activity.Time;
+                    dayToEdit.PlaceName = activity.PlaceName;
+                    dayToEdit.Rating = activity.Rating;
+                    _context.Update(dayToEdit);
+                    _context.SaveChanges();
+                    return RedirectToAction("DayDetails");
+                }
+            }
+            return View(activity);
+        }
         private bool TravelerExists(int id)
         {
             return _context.Travelers.Any(e => e.Id == id);
