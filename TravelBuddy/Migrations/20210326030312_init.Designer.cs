@@ -10,8 +10,8 @@ using TravelBuddy.Data;
 namespace TravelBuddy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210325025233_Migration3")]
-    partial class Migration3
+    [Migration("20210326030312_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,8 +50,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0db1d588-1a67-48db-beee-8436dacff287",
-                            ConcurrencyStamp = "45601da3-78aa-4363-8e3e-daa23eefaf52",
+                            Id = "67601f55-e1a6-4149-8e22-f6e202168475",
+                            ConcurrencyStamp = "fac4c9a5-7c0f-495a-8975-96457b1e850c",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -236,6 +236,9 @@ namespace TravelBuddy.Migrations
                     b.Property<double?>("AdventureMaxDistance")
                         .HasColumnType("float");
 
+                    b.Property<int>("DayId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PlaceName")
                         .HasColumnType("nvarchar(max)");
 
@@ -256,6 +259,8 @@ namespace TravelBuddy.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DayId");
+
                     b.ToTable("Activities");
                 });
 
@@ -266,18 +271,18 @@ namespace TravelBuddy.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ActivityId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TravelerId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ActivityId");
+                    b.HasIndex("TravelerId");
 
                     b.ToTable("Days");
                 });
@@ -288,9 +293,6 @@ namespace TravelBuddy.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("DayId")
-                        .HasColumnType("int");
 
                     b.Property<string>("DestinationCity")
                         .HasColumnType("nvarchar(max)");
@@ -320,8 +322,6 @@ namespace TravelBuddy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DayId");
 
                     b.HasIndex("IdentityUserID");
 
@@ -379,19 +379,26 @@ namespace TravelBuddy.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TravelBuddy.Models.Activity", b =>
+                {
+                    b.HasOne("TravelBuddy.Models.Day", "Day")
+                        .WithMany()
+                        .HasForeignKey("DayId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TravelBuddy.Models.Day", b =>
                 {
-                    b.HasOne("TravelBuddy.Models.Activity", "Activity")
+                    b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
                         .WithMany()
-                        .HasForeignKey("ActivityId");
+                        .HasForeignKey("TravelerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TravelBuddy.Models.Traveler", b =>
                 {
-                    b.HasOne("TravelBuddy.Models.Day", "Day")
-                        .WithMany()
-                        .HasForeignKey("DayId");
-
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
                         .WithMany()
                         .HasForeignKey("IdentityUserID");

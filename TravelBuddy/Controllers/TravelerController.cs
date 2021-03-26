@@ -30,8 +30,17 @@ namespace TravelBuddy.Controllers
             {
                 return RedirectToAction("Create");
             }
-            var travelerDays = _context.Days.Where(d => d.Id == traveler.DayId);
+            var travelerDays = _context.Days.Where(d => d.TravelerId == traveler.Id);
             return View(travelerDays);
+        }
+        public ActionResult DayDetails() 
+        {
+            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+            var activitiesList = _context.Activities.Where(a => a.DayId == day.Id);
+            return View(activitiesList);
         }
 
         // GET: Travelers/Details/5
@@ -47,15 +56,6 @@ namespace TravelBuddy.Controllers
             }
 
             return View(traveler);
-        }
-        public ActionResult DayDetails(int? id)
-        {
-            var day = _context.Days.Find(id);
-            if(day == null)
-            {
-                return NotFound();
-            }
-            return View(day);
         }
 
         // GET: Travelers/Create
@@ -96,17 +96,33 @@ namespace TravelBuddy.Controllers
             var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
             if (ModelState.IsValid)
             {
-                day.ActivityId = null;
+                day.TravelerId = traveler.Id;
                 _context.Days.Add(day);
-                _context.SaveChanges();
-                //traveler.Day = day;
-                //_context.Travelers.Update(traveler);
-                traveler.DayId = day.Id;
-                _context.Update(traveler);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(day);
+        }
+        public ActionResult CreateActivity()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateActivity(Activity activity)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                activity.DayId = day.Id;
+                _context.Activities.Add(activity);
+                _context.SaveChanges();
+                return RedirectToAction("DayDetails");
+            }
+            return View(activity);
         }
 
         // GET: Travelers/Edit/5
@@ -200,7 +216,7 @@ namespace TravelBuddy.Controllers
                     dayToEdit.Name = day.Name;
                     _context.Update(dayToEdit);
                     _context.SaveChanges();
-                    return RedirectToAction("DayDetails");
+                    return RedirectToAction("Index");
                 }
             }
             return View(day);

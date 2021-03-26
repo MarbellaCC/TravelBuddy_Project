@@ -3,29 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TravelBuddy.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Activity",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Time = table.Column<DateTime>(nullable: true),
-                    PlaceName = table.Column<string>(nullable: true),
-                    Rating = table.Column<int>(nullable: false),
-                    RestaurantMaxDistance = table.Column<double>(nullable: true),
-                    AdventureMaxDistance = table.Column<double>(nullable: true),
-                    TypeOfRestaurant = table.Column<string>(nullable: true),
-                    TypeOfAdventure = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Activity", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -63,27 +44,6 @@ namespace TravelBuddy.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Days",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Date = table.Column<DateTime>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
-                    ActivityId = table.Column<int>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Days", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Days_Activity_ActivityId",
-                        column: x => x.ActivityId,
-                        principalTable: "Activity",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -198,7 +158,6 @@ namespace TravelBuddy.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DayId = table.Column<int>(nullable: false),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     Interests = table.Column<string>(nullable: true),
@@ -213,12 +172,6 @@ namespace TravelBuddy.Migrations
                 {
                     table.PrimaryKey("PK_Travelers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Travelers_Days_DayId",
-                        column: x => x.DayId,
-                        principalTable: "Days",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Travelers_AspNetUsers_IdentityUserID",
                         column: x => x.IdentityUserID,
                         principalTable: "AspNetUsers",
@@ -226,10 +179,62 @@ namespace TravelBuddy.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Days",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Date = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
+                    TravelerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Days", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Days_Travelers_TravelerId",
+                        column: x => x.TravelerId,
+                        principalTable: "Travelers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Activities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Time = table.Column<DateTime>(nullable: true),
+                    PlaceName = table.Column<string>(nullable: true),
+                    Rating = table.Column<int>(nullable: false),
+                    RestaurantMaxDistance = table.Column<double>(nullable: true),
+                    AdventureMaxDistance = table.Column<double>(nullable: true),
+                    TypeOfRestaurant = table.Column<string>(nullable: true),
+                    TypeOfAdventure = table.Column<string>(nullable: true),
+                    DayId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Activities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Activities_Days_DayId",
+                        column: x => x.DayId,
+                        principalTable: "Days",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "bff96b4b-b034-4651-9f21-ae37c0715c2b", "ae406cde-c203-49fc-a13e-076946613d7d", "Customer", "CUSTOMER" });
+                values: new object[] { "67601f55-e1a6-4149-8e22-f6e202168475", "fac4c9a5-7c0f-495a-8975-96457b1e850c", "Customer", "CUSTOMER" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Activities_DayId",
+                table: "Activities",
+                column: "DayId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -271,14 +276,9 @@ namespace TravelBuddy.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Days_ActivityId",
+                name: "IX_Days_TravelerId",
                 table: "Days",
-                column: "ActivityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Travelers_DayId",
-                table: "Travelers",
-                column: "DayId");
+                column: "TravelerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Travelers_IdentityUserID",
@@ -288,6 +288,9 @@ namespace TravelBuddy.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Activities");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -304,19 +307,16 @@ namespace TravelBuddy.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Travelers");
+                name: "Days");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Days");
+                name: "Travelers");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "Activity");
         }
     }
 }
