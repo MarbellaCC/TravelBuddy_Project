@@ -7,6 +7,6 @@ namespace TravelBuddy
 {
     public static class APIKeys
     {
-        public const string GOOGLE_API_KEY = "AIzaSyBveiZDkM52LluaCmyONAWFfVQaFPHF6QU";
+        public const string GOOGLE_API_KEY = "AIzaSyBC4evasDrmG5KGg3ZCqUfq5apvrL3NaVI";
     }
 }

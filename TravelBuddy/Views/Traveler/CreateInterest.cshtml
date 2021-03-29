@@ -1,0 +1,34 @@
+﻿@model TravelBuddy.Models.Interest
+
+@{
+    ViewData["Title"] = "CreateInterest";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CreateInterest</h1>
+
+<h4>Interest</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateInterest">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="InterestList">Back to Interests</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

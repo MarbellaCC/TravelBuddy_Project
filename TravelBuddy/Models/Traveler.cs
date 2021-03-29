@@ -16,7 +16,6 @@ namespace TravelBuddy.Models
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName {get; set; }
-        public string Interests { get; set; }
         [Display(Name = "City")]
         public string DestinationCity { get; set; }
         [Display(Name = "State")]

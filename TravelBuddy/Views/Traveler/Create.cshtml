@@ -24,11 +24,6 @@
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Interests" class="control-label"></label>
-                <textarea asp-for="Interests" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="Interests" class="text-danger"></span>
-            </div>>
-            <div class="form-group">
                 <label asp-for="DestinationCity" class="control-label"></label>
                 <input asp-for="DestinationCity" class="form-control" />
                 <span asp-validation-for="DestinationCity" class="text-danger"></span>
@@ -304,7 +299,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="Lodging" class="control-label"></label>
-                <input asp-for="Lodging" class="form-control" />
+                <select asp-for="Lodging" class="form-control">
+                    <option value="None">Select Lodging</option>
+                    <option value="Hotel">Hotel</option>
+                    <option value="Motel">Motel</option>
+                    <option value="Hostel">Hostel</option>
+                </select>
                 <span asp-validation-for="Lodging" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -315,7 +315,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="AddInterest">Add Interests</a>
 </div>
 
 @section Scripts {

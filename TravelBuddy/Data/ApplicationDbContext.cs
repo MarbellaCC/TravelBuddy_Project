@@ -20,6 +20,7 @@ namespace TravelBuddy.Data
             builder.Entity<IdentityRole>().HasData(new IdentityRole { Name = "Customer", NormalizedName = "CUSTOMER" });
         }
         public DbSet<Traveler>Travelers { get; set; }
+        public DbSet<Interest>Interests { get; set; }
         public DbSet<Day>Days { get; set; }
         public DbSet<Activity> Activities { get; set; }
     }

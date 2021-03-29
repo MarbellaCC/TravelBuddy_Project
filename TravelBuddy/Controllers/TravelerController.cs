@@ -87,6 +87,26 @@ namespace TravelBuddy.Controllers
             ViewData["IdentityUserID"] = new SelectList(_context.Users, "Id", "Id", traveler.IdentityUserID);
             return View(traveler);
         }
+        public ActionResult CreateInterest()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateInterest(Interest interest)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                interest.TravelerId = traveler.Id;
+                _context.Interests.Add(interest);
+                _context.SaveChanges();
+                return RedirectToAction("InterestList");
+            }
+            return View(interest);
+        }
         public ActionResult CreateDay()
         {
             return View();
@@ -165,7 +185,6 @@ namespace TravelBuddy.Controllers
                     Traveler travelerToEdit = _context.Travelers.Find(id);
                     travelerToEdit.FirstName = traveler.FirstName;
                     travelerToEdit.LastName = traveler.LastName;
-                    travelerToEdit.Interests = traveler.Interests;
                     travelerToEdit.DestinationCity = traveler.DestinationCity;
                     travelerToEdit.DestinationState = traveler.DestinationState;
                     travelerToEdit.DestinationCountry = traveler.DestinationCountry;
