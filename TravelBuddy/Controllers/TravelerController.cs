@@ -45,6 +45,14 @@ namespace TravelBuddy.Controllers
             var activitiesList = _context.Activities.Where(a => a.DayId == day.Id);
             return View(activitiesList);
         }
+        public ActionResult InterestList()
+        {
+            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var travelerInterests = _context.Interests.Where(i => i.TravelerId == traveler.Id);
+            return View(travelerInterests);
+        }
 
         // GET: Travelers/Details/5
         public ActionResult Details()
