@@ -347,6 +347,34 @@ namespace TravelBuddy.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(DayDetails));
         }
+        public async Task<IActionResult> DeleteInterest(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var interest = await _context.Interests
+                .Include(i => i.Traveler)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (interest == null)
+            {
+                return NotFound();
+            }
+
+            return View(interest);
+        }
+
+        // POST: Days/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteInterest(int id)
+        {
+            var interest = await _context.Interests.FindAsync(id);
+            _context.Interests.Remove(interest);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(InterestList));
+        }
         private bool TravelerExists(int id)
         {
             return _context.Travelers.Any(e => e.Id == id);
