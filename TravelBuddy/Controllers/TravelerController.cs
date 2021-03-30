@@ -16,11 +16,13 @@ namespace TravelBuddy.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly GeocodingService _geocodingSerice;
+        private readonly GooglePlacesService _googlePlacesService;
 
-        public TravelerController(ApplicationDbContext context, GeocodingService geocodingService)
+        public TravelerController(ApplicationDbContext context, GeocodingService geocodingService, GooglePlacesService googlePlacesService)
         {
             _context = context;
             _geocodingSerice = geocodingService;
+            _googlePlacesService = googlePlacesService;
         }
 
         // GET: Travelers
@@ -88,6 +90,7 @@ namespace TravelBuddy.Controllers
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 traveler.IdentityUserID = userId;
                 var travelerLatLong = await _geocodingSerice.GetGeocoding(traveler);
+                var travelerLodging = await _googlePlacesService.GetPlaces(traveler);
                 _context.Add(travelerLatLong);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

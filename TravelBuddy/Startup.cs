@@ -41,6 +41,7 @@ namespace TravelBuddy
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddTransient<GeocodingService>();
+            services.AddTransient<GooglePlacesService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -160,12 +160,17 @@ namespace TravelBuddy.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
-                    Interests = table.Column<string>(nullable: true),
                     DestinationCity = table.Column<string>(nullable: true),
                     DestinationState = table.Column<string>(nullable: true),
                     DestinationCountry = table.Column<string>(nullable: true),
                     ZipCode = table.Column<string>(nullable: true),
                     Lodging = table.Column<string>(nullable: true),
+                    Latitude = table.Column<double>(nullable: false),
+                    Longitude = table.Column<double>(nullable: false),
+                    HotelName = table.Column<string>(nullable: true),
+                    HotelPhotos = table.Column<string>(nullable: true),
+                    HotelRating = table.Column<string>(nullable: true),
+                    HotelAddress = table.Column<string>(nullable: true),
                     IdentityUserID = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -201,6 +206,26 @@ namespace TravelBuddy.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Interests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(nullable: true),
+                    TravelerId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Interests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Interests_Travelers_TravelerId",
+                        column: x => x.TravelerId,
+                        principalTable: "Travelers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Activities",
                 columns: table => new
                 {
@@ -229,7 +254,7 @@ namespace TravelBuddy.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "67601f55-e1a6-4149-8e22-f6e202168475", "fac4c9a5-7c0f-495a-8975-96457b1e850c", "Customer", "CUSTOMER" });
+                values: new object[] { "666c5b39-85db-45a5-ac34-f25f2e6b0437", "3c7e6853-87ef-4018-9661-43ef21234d8b", "Customer", "CUSTOMER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Activities_DayId",
@@ -281,6 +306,11 @@ namespace TravelBuddy.Migrations
                 column: "TravelerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Interests_TravelerId",
+                table: "Interests",
+                column: "TravelerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Travelers_IdentityUserID",
                 table: "Travelers",
                 column: "IdentityUserID");
@@ -305,6 +335,9 @@ namespace TravelBuddy.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Interests");
 
             migrationBuilder.DropTable(
                 name: "Days");

@@ -9,20 +9,20 @@ using TravelBuddy.Models;
 
 namespace TravelBuddy.Services
 {
-    public class GeocodingService
+    public class GooglePlacesService
     {
-        public GeocodingService()
+        public GooglePlacesService()
         {
 
         }
-        public string GetGeocodingURL(Traveler traveler)
+        public string GetPlacesURL(Traveler traveler)
         {
-            return $"https://maps.googleapis.com/maps/api/geocode/json?address={traveler.DestinationState}+{traveler.ZipCode}+&key=";// + APIKeys.GOOGLE_API_KEY;
+            return $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={traveler.Latitude},{traveler.Longitude}&radius=1500&keyword={traveler.Lodging}&key="; //+ APIKeys.GOOGLE_API_KEY;
         }
-        public async Task<Traveler> GetGeocoding(Traveler traveler)
+        public async Task<Traveler> GetPlaces(Traveler traveler)
         {
-            string apiURL = GetGeocodingURL(traveler);
-            using(HttpClient client = new HttpClient())
+            string apiURL = GetPlacesURL(traveler);
+            using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = new Uri(apiURL);
                 client.DefaultRequestHeaders.Accept.Clear();
@@ -35,12 +35,21 @@ namespace TravelBuddy.Services
                     JObject jsonResults = JsonConvert.DeserializeObject<JObject>(data);
                     JToken results = jsonResults["results"][0];
                     JToken location = results["geometry"]["location"];
+                    JToken name = results["name"];
+                    JToken photos = results["photos"];
+                    JToken rating = results["rating"];
+                    JToken address = results["vicinity"];
 
                     traveler.Latitude = (double)location["lat"];
                     traveler.Longitude = (double)location["lng"];
+                    traveler.HotelName = (string)name;
+                    traveler.HotelPhotos = (string)photos;
+                    traveler.HotelRating = (string)rating;
+                    traveler.HotelAddress = (string)address;
+
                 }
             }
             return traveler;
-        } 
+        }
     }
 }

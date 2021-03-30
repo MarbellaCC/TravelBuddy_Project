@@ -27,6 +27,10 @@ namespace TravelBuddy.Models
         public string Lodging { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        public string HotelName { get; set; }
+        public string HotelPhotos { get; set; }
+        public string HotelRating { get; set; }
+        public string HotelAddress { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserID { get; set; }
