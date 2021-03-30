@@ -17,7 +17,7 @@ namespace TravelBuddy.Services
         }
         public string GetGeocodingURL(Traveler traveler)
         {
-            return $"https://maps.googleapis.com/maps/api/geocode/json?address={traveler.DestinationState}+{traveler.ZipCode}+&key=";// + APIKeys.GOOGLE_API_KEY;
+            return $"https://maps.googleapis.com/maps/api/geocode/json?address={traveler.DestinationState}+{traveler.ZipCode}+&key=" + APIKeys.GOOGLE_API_KEY;
         }
         public async Task<Traveler> GetGeocoding(Traveler traveler)
         {

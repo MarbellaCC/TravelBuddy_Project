@@ -31,6 +31,7 @@ namespace TravelBuddy.Models
         public string HotelPhotos { get; set; }
         public string HotelRating { get; set; }
         public string HotelAddress { get; set; }
+        public string HotelMaxDistance { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserID { get; set; }

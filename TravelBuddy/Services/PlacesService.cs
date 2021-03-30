@@ -17,7 +17,7 @@ namespace TravelBuddy.Services
         }
         public string GetPlacesURL(Traveler traveler)
         {
-            return $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={traveler.Latitude},{traveler.Longitude}&radius=1500&keyword={traveler.Lodging}&key="; //+ APIKeys.GOOGLE_API_KEY;
+            return $"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={traveler.Latitude},{traveler.Longitude}&radius={traveler.HotelMaxDistance}&keyword={traveler.Lodging}&key=" + APIKeys.GOOGLE_API_KEY;
         }
         public async Task<Traveler> GetPlaces(Traveler traveler)
         {
@@ -36,14 +36,14 @@ namespace TravelBuddy.Services
                     JToken results = jsonResults["results"][0];
                     JToken location = results["geometry"]["location"];
                     JToken name = results["name"];
-                    JToken photos = results["photos"];
+                    JToken photos = results["photos"][0];
                     JToken rating = results["rating"];
                     JToken address = results["vicinity"];
 
                     traveler.Latitude = (double)location["lat"];
                     traveler.Longitude = (double)location["lng"];
                     traveler.HotelName = (string)name;
-                    traveler.HotelPhotos = (string)photos;
+                    traveler.HotelPhotos = (string)photos["html_attributions"][0];
                     traveler.HotelRating = (string)rating;
                     traveler.HotelAddress = (string)address;
 

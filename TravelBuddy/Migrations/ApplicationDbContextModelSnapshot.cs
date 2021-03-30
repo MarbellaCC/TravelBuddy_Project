@@ -48,8 +48,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "666c5b39-85db-45a5-ac34-f25f2e6b0437",
-                            ConcurrencyStamp = "3c7e6853-87ef-4018-9661-43ef21234d8b",
+                            Id = "60f549db-ba70-421d-b025-ae362db5ed37",
+                            ConcurrencyStamp = "cd919749-6cb0-4237-80a6-88a371661939",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -325,6 +325,9 @@ namespace TravelBuddy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HotelAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HotelMaxDistance")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HotelName")
