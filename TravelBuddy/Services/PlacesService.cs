@@ -9,9 +9,9 @@ using TravelBuddy.Models;
 
 namespace TravelBuddy.Services
 {
-    public class GooglePlacesService
+    public class PlacesService
     {
-        public GooglePlacesService()
+        public PlacesService()
         {
 
         }

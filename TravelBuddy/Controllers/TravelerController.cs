@@ -16,9 +16,9 @@ namespace TravelBuddy.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly GeocodingService _geocodingSerice;
-        private readonly GooglePlacesService _googlePlacesService;
+        private readonly PlacesService _googlePlacesService;
 
-        public TravelerController(ApplicationDbContext context, GeocodingService geocodingService, GooglePlacesService googlePlacesService)
+        public TravelerController(ApplicationDbContext context, GeocodingService geocodingService, PlacesService googlePlacesService)
         {
             _context = context;
             _geocodingSerice = geocodingService;
