@@ -1,0 +1,78 @@
+﻿@model IEnumerable<TravelBuddy.Models.Hotel>
+
+@{
+    ViewData["Title"] = "HotelList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>HotelList</h1>
+
+<p>
+    <a asp-action="CreateHotel">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.HotelName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HotelGoogleRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HotelAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HotelLat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HotelLng)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lodging)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HotelMaxDistance)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Traveler)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.HotelName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HotelGoogleRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HotelAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HotelLat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HotelLng)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lodging)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HotelMaxDistance)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Traveler.Id)
+            </td>
+            <td>
+                <a asp-action="EditHotel" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="HotelDetails" asp-route-id="@item.Id">Edit</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

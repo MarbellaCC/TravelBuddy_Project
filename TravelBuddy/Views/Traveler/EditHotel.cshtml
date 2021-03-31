@@ -1,0 +1,75 @@
+﻿@model TravelBuddy.Models.Hotel
+
+@{
+    ViewData["Title"] = "EditHotel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>EditHotel</h1>
+
+<h4>Hotel</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="EditHotel">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            @*<div class="form-group">
+                <label asp-for="HotelName" class="control-label"></label>
+                <input asp-for="HotelName" class="form-control" />
+                <span asp-validation-for="HotelName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HotelPhotos" class="control-label"></label>
+                <input asp-for="HotelPhotos" class="form-control" />
+                <span asp-validation-for="HotelPhotos" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HotelGoogleRating" class="control-label"></label>
+                <input asp-for="HotelGoogleRating" class="form-control" />
+                <span asp-validation-for="HotelGoogleRating" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HotelAddress" class="control-label"></label>
+                <input asp-for="HotelAddress" class="form-control" />
+                <span asp-validation-for="HotelAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HotelLat" class="control-label"></label>
+                <input asp-for="HotelLat" class="form-control" />
+                <span asp-validation-for="HotelLat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HotelLng" class="control-label"></label>
+                <input asp-for="HotelLng" class="form-control" />
+                <span asp-validation-for="HotelLng" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <label asp-for="Lodging" class="control-label"></label>
+                <input asp-for="Lodging" class="form-control" />
+                <span asp-validation-for="Lodging" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HotelMaxDistance" class="control-label"></label>
+                <input asp-for="HotelMaxDistance" class="form-control" />
+                <span asp-validation-for="HotelMaxDistance" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
+                <label asp-for="TravelerId" class="control-label"></label>
+                <select asp-for="TravelerId" class="form-control" asp-items="ViewBag.TravelerId"></select>
+                <span asp-validation-for="TravelerId" class="text-danger"></span>
+            </div>*@
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

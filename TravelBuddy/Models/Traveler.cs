@@ -24,14 +24,8 @@ namespace TravelBuddy.Models
         public string DestinationCountry { get; set; }
         [Display(Name = "Zip code")]
         public string ZipCode { get; set; }
-        public string Lodging { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public string HotelName { get; set; }
-        public string HotelPhotos { get; set; }
-        public string HotelRating { get; set; }
-        public string HotelAddress { get; set; }
-        public string HotelMaxDistance { get; set; }
 
         [ForeignKey("IdentityUser")]
         public string IdentityUserID { get; set; }

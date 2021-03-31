@@ -83,14 +83,13 @@ namespace TravelBuddy.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Traveler traveler)
+        public async Task<IActionResult> Create(Traveler traveler, Locations location)
         {
             if (ModelState.IsValid)
             {
                 var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
                 traveler.IdentityUserID = userId;
                 var travelerLatLong = await _geocodingSerice.GetGeocoding(traveler);
-                var travelerLodging = await _googlePlacesService.GetPlaces(traveler);
                 _context.Add(travelerLatLong);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -200,7 +199,6 @@ namespace TravelBuddy.Controllers
                     travelerToEdit.DestinationState = traveler.DestinationState;
                     travelerToEdit.DestinationCountry = traveler.DestinationCountry;
                     travelerToEdit.ZipCode = traveler.ZipCode;
-                    travelerToEdit.Lodging = traveler.Lodging;
                     travelerToEdit.Latitude = traveler.Latitude;
                     travelerToEdit.Longitude = traveler.Longitude;
                     await _geocodingSerice.GetGeocoding(travelerToEdit);
@@ -381,6 +379,87 @@ namespace TravelBuddy.Controllers
         private bool TravelerExists(int id)
         {
             return _context.Travelers.Any(e => e.Id == id);
+        }
+
+        public ActionResult CreateHotel()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateHotel(Hotel hotel)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                hotel.TravelerId = traveler.Id;
+                Locations locations = await _googlePlacesService.GetHotels(traveler, hotel);
+                hotel.HotelName = locations.results[3].name;
+                hotel.HotelAddress = locations.results[3].vicinity;
+                hotel.HotelPhotos = locations.results[3].photos[0].html_attributions[0];
+                hotel.HotelGoogleRating = locations.results[3].rating;
+                hotel.HotelLat = locations.results[3].geometry.location.lat;
+                hotel.HotelLng = locations.results[3].geometry.location.lng;
+                _context.Hotels.Add(hotel);
+                _context.SaveChanges();
+                return RedirectToAction("HotelList");
+            }
+            return View(hotel);
+        }
+        public ActionResult HotelList()
+        {
+            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var travelerHotel = _context.Hotels.Where(h => h.TravelerId == traveler.Id);
+            return View(travelerHotel);
+        }
+        public ActionResult EditHotel(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var hotel = _context.Hotels.Find(id);
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+            return View(hotel);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditHotel(int id)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var hotelToEdit = _context.Hotels.Find(id);
+            Locations locations = await _googlePlacesService.GetHotels(traveler, hotelToEdit);
+            hotelToEdit.HotelName = locations.results[3].name;
+            hotelToEdit.HotelAddress = locations.results[3].vicinity;
+            hotelToEdit.HotelPhotos = locations.results[3].photos[0].html_attributions[0];
+            hotelToEdit.HotelGoogleRating = locations.results[3].rating;
+            hotelToEdit.HotelLat = locations.results[3].geometry.location.lat;
+            hotelToEdit.HotelLng = locations.results[3].geometry.location.lng;
+            _context.Update(hotelToEdit);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("HotelList");
+        }
+        public ActionResult HotelDetails()
+        {
+            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).SingleOrDefault();
+            var hotel = _context.Hotels.Where(h => h.TravelerId == traveler.Id).SingleOrDefault();
+            ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+
+            return View(hotel);
         }
     }
 }

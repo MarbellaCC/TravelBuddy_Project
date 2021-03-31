@@ -48,8 +48,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "60f549db-ba70-421d-b025-ae362db5ed37",
-                            ConcurrencyStamp = "cd919749-6cb0-4237-80a6-88a371661939",
+                            Id = "f24c2677-ece5-45a2-8202-b1cf4cc1548c",
+                            ConcurrencyStamp = "aeb6e74d-c279-424b-b7bc-d8a3fabc0080",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -285,6 +285,47 @@ namespace TravelBuddy.Migrations
                     b.ToTable("Days");
                 });
 
+            modelBuilder.Entity("TravelBuddy.Models.Hotel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("HotelAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("HotelGoogleRating")
+                        .HasColumnType("real");
+
+                    b.Property<float>("HotelLat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("HotelLng")
+                        .HasColumnType("real");
+
+                    b.Property<string>("HotelMaxDistance")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HotelName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HotelPhotos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Lodging")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TravelerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TravelerId");
+
+                    b.ToTable("Hotels");
+                });
+
             modelBuilder.Entity("TravelBuddy.Models.Interest", b =>
                 {
                     b.Property<int>("Id")
@@ -324,21 +365,6 @@ namespace TravelBuddy.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HotelAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HotelMaxDistance")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HotelName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HotelPhotos")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HotelRating")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("IdentityUserID")
                         .HasColumnType("nvarchar(450)");
 
@@ -347,9 +373,6 @@ namespace TravelBuddy.Migrations
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
-
-                    b.Property<string>("Lodging")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Longitude")
                         .HasColumnType("float");
@@ -425,6 +448,15 @@ namespace TravelBuddy.Migrations
                 });
 
             modelBuilder.Entity("TravelBuddy.Models.Day", b =>
+                {
+                    b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
+                        .WithMany()
+                        .HasForeignKey("TravelerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TravelBuddy.Models.Hotel", b =>
                 {
                     b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
                         .WithMany()
