@@ -1,0 +1,58 @@
+﻿@model TravelBuddy.Models.Activity
+
+@{
+    ViewData["Title"] = "ActivityDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ActivityDetails</h1>
+
+<div>
+    <h4>Activity</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Time)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Time)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.PlaceName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.PlaceName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="DayDetails">Back to List</a>
+</div>
+<div id="map"></div>
+<style>
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+</style>
+<script>
+    function initMap() {
+        var location = { lat: @Model.ActivityLat, lng: @Model.ActivityLng};
+        var map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 15,
+            center: location
+        });
+        var marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
+
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.ApiKeys&callback=initMap"></script>

@@ -70,6 +70,21 @@ namespace TravelBuddy.Controllers
 
             return View(traveler);
         }
+        public ActionResult ActivityDetails()
+        {
+            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).SingleOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).SingleOrDefault();
+            var activity = _context.Activities.Where(a => a.DayId == day.Id).SingleOrDefault();
+            ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            return View(activity);
+        }
 
         // GET: Travelers/Create
         public IActionResult Create()
@@ -144,7 +159,7 @@ namespace TravelBuddy.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateActivity(Activity activity)
+        public async Task<IActionResult> CreateActivity(Activity activity)
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
@@ -152,6 +167,11 @@ namespace TravelBuddy.Controllers
             if (ModelState.IsValid)
             {
                 activity.DayId = day.Id;
+                Locations locations = await _googlePlacesService.GetActivity(traveler, activity);
+                activity.PlaceName = locations.results[0].name;
+                activity.Rating = locations.results[0].rating;
+                activity.ActivityLat = locations.results[0].geometry.location.lat;
+                activity.ActivityLng = locations.results[0].geometry.location.lng;
                 _context.Activities.Add(activity);
                 _context.SaveChanges();
                 return RedirectToAction("DayDetails");
@@ -271,7 +291,7 @@ namespace TravelBuddy.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditActivity(int id, Activity activity)
+        public async Task<IActionResult> EditActivity(int id, Activity activity)
         {
             if (id != activity.Id)
             {
@@ -281,11 +301,19 @@ namespace TravelBuddy.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var dayToEdit = _context.Activities.Find(id);
-                    dayToEdit.Time = activity.Time;
-                    dayToEdit.PlaceName = activity.PlaceName;
-                    dayToEdit.Rating = activity.Rating;
-                    _context.Update(dayToEdit);
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+                    var activityToEdit = _context.Activities.Find(id);
+                    activityToEdit.MaxDistance = activity.MaxDistance;
+                    activityToEdit.Time = activity.Time;
+                    activityToEdit.TypeOfActivity = activity.TypeOfActivity;
+                    activityToEdit.TypeOfAdventureOrRestaurant = activity.TypeOfAdventureOrRestaurant;
+                    Locations locations = await _googlePlacesService.GetActivity(traveler, activityToEdit);
+                    activityToEdit.PlaceName = locations.results[0].name;
+                    activityToEdit.Rating = locations.results[0].rating;
+                    activityToEdit.ActivityLat = locations.results[0].geometry.location.lat;
+                    activityToEdit.ActivityLng = locations.results[0].geometry.location.lng;
+                    _context.Update(activityToEdit);
                     _context.SaveChanges();
                     return RedirectToAction("DayDetails");
                 }

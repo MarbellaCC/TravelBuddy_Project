@@ -15,15 +15,15 @@ namespace TravelBuddy.Models
         public DateTime? Time { get; set; }
         public string PlaceName { get; set; }
         [Range(0,5)]
-        public int Rating { get; set; }
-        [Display(Name = "Restaurant Max Distane")]
-        public double? RestaurantMaxDistance { get; set; }
-        [Display(Name = "Adventure Max Distance")]
-        public double? AdventureMaxDistance { get; set; }
-        [Display(Name = "Type of Restaurant")]
-        public string TypeOfRestaurant { get; set; }
-        [Display(Name = "Type of Adventure")]
-        public string TypeOfAdventure { get; set; }
+        public float Rating { get; set; }
+        [Display(Name = "Max Distane")]
+        public double? MaxDistance { get; set; }
+        [Display(Name = "Type of Activity")]
+        public string TypeOfActivity { get; set; }
+        [Display(Name = "Adventure/Restaurant Type")]
+        public string TypeOfAdventureOrRestaurant { get; set; }
+        public float ActivityLat { get; set; }
+        public float ActivityLng { get; set; }
         [ForeignKey("Day")]
         public int DayId { get; set; }
         public Day Day { get; set; } 

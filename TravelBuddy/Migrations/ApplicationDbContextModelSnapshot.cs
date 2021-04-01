@@ -48,8 +48,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "f24c2677-ece5-45a2-8202-b1cf4cc1548c",
-                            ConcurrencyStamp = "aeb6e74d-c279-424b-b7bc-d8a3fabc0080",
+                            Id = "af74ecf7-9c33-413c-9f07-861f45803ee9",
+                            ConcurrencyStamp = "0068f658-65b5-4ab6-8c5a-7ba484bb9058",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -231,28 +231,31 @@ namespace TravelBuddy.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<double?>("AdventureMaxDistance")
-                        .HasColumnType("float");
+                    b.Property<float>("ActivityLat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ActivityLng")
+                        .HasColumnType("real");
 
                     b.Property<int>("DayId")
                         .HasColumnType("int");
 
+                    b.Property<double?>("MaxDistance")
+                        .HasColumnType("float");
+
                     b.Property<string>("PlaceName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<double?>("RestaurantMaxDistance")
-                        .HasColumnType("float");
+                    b.Property<float>("Rating")
+                        .HasColumnType("real");
 
                     b.Property<DateTime?>("Time")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TypeOfAdventure")
+                    b.Property<string>("TypeOfActivity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("TypeOfRestaurant")
+                    b.Property<string>("TypeOfAdventureOrRestaurant")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
