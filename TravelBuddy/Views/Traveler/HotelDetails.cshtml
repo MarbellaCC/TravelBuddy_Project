@@ -34,25 +34,72 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+<div id="floating-panel">
+    <b>Start: </b>
+    <input id="start" type="text" />
+</div>
 <div id="map"></div>
 <style>
-    #map{
-        height:400px;
-        width:100%;
+    #map {
+        height: 400px;
+        width: 100%;
+    }
+
+    #floating-panel {
+        position: relative;
+        top: 10px;
+        left: 0%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        line-height: 30px;
+        padding-left: 10px;
     }
 </style>
 <script>
     function initMap() {
-        var location = { lat: @Model.HotelLat, lng: @Model.HotelLng};
-        var map = new google.maps.Map(document.getElementById("map"), {
+        const directionsService = new google.maps.DirectionsService();
+        const directionsRenderer = new google.maps.DirectionsRenderer();
+        const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 15,
-            center: location
+            center: { lat: @Model.HotelLat, lng: @Model.HotelLng},
         });
+        directionsRenderer.setMap(map);
+
+        const onChangeHandler = function () {
+            calculateAndDisplayRoute(directionsService, directionsRenderer);
+        };
+        document
+            .getElementById("start")
+            .addEventListener("change", onChangeHandler);
+        document
+            .getElementById("end")
+            .addEventListener("change", onChangeHandler);
         var marker = new google.maps.Marker({
-            position: location,
+            position: { lat: @Model.HotelLat, lng: @Model.HotelLng},
             map: map
         });
-
+    }
+    function calculateAndDisplayRoute(directionsService, directionsRenderer) {
+        directionsService.route(
+            {
+                origin: {
+                    query: document.getElementById("start").value,
+                },
+                destination: { lat: @Model.HotelLat, lng: @Model.HotelLng},
+                travelMode: google.maps.TravelMode.DRIVING,
+            },
+            (response, status) => {
+                if (status === "OK") {
+                    directionsRenderer.setDirections(response);
+                } else {
+                    window.alert("Directions request failed due to" + status);
+                }
+            }
+        );
     }
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.ApiKeys&callback=initMap"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.ApiKeys&callback=initMap&libraries=&v=weekly" async></script>

@@ -59,7 +59,6 @@ namespace TravelBuddy.Controllers
         // GET: Travelers/Details/5
         public ActionResult Details()
         {
-            //var traveler = await _context.Travelers.Include(t => t.IdentityUser).FirstOrDefaultAsync(m => m.Id == id);
             var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).SingleOrDefault();
@@ -70,13 +69,9 @@ namespace TravelBuddy.Controllers
 
             return View(traveler);
         }
-        public ActionResult ActivityDetails()
+        public ActionResult ActivityDetails(int? id)
         {
-            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
-            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).SingleOrDefault();
-            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).SingleOrDefault();
-            var activity = _context.Activities.Where(a => a.DayId == day.Id).SingleOrDefault();
+            var activity = _context.Activities.Find(id);
             ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
             if (activity == null)
             {
@@ -169,9 +164,10 @@ namespace TravelBuddy.Controllers
                 activity.DayId = day.Id;
                 Locations locations = await _googlePlacesService.GetActivity(traveler, activity);
                 activity.PlaceName = locations.results[0].name;
-                activity.Rating = locations.results[0].rating;
+                activity.GoogleRating = locations.results[0].rating;
                 activity.ActivityLat = locations.results[0].geometry.location.lat;
                 activity.ActivityLng = locations.results[0].geometry.location.lng;
+                activity.Address = locations.results[0].vicinity;
                 _context.Activities.Add(activity);
                 _context.SaveChanges();
                 return RedirectToAction("DayDetails");
@@ -310,9 +306,55 @@ namespace TravelBuddy.Controllers
                     activityToEdit.TypeOfAdventureOrRestaurant = activity.TypeOfAdventureOrRestaurant;
                     Locations locations = await _googlePlacesService.GetActivity(traveler, activityToEdit);
                     activityToEdit.PlaceName = locations.results[0].name;
-                    activityToEdit.Rating = locations.results[0].rating;
+                    activityToEdit.GoogleRating = locations.results[0].rating;
                     activityToEdit.ActivityLat = locations.results[0].geometry.location.lat;
                     activityToEdit.ActivityLng = locations.results[0].geometry.location.lng;
+                    activityToEdit.Address = locations.results[0].vicinity;
+                    _context.Update(activityToEdit);
+                    _context.SaveChanges();
+                    return RedirectToAction("DayDetails");
+                }
+            }
+            return View(activity);
+        }
+        public ActionResult RateActivity(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var activity = _context.Activities.Find(id);
+            if (activity == null)
+            {
+                return NotFound();
+            }
+            return View(activity);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RateActivity(int id, Activity activity)
+        {
+            if (id != activity.Id)
+            {
+                return NotFound();
+            }
+            else
+            {
+                if (ModelState.IsValid)
+                {
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+                    var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+                    var activityToEdit = _context.Activities.Find(id);
+                    activityToEdit.RatingAdded = activity.RatingAdded;
+                    activityToEdit.RatingList.Add(activity.RatingAdded);
+                    double ratingTotaled = 0;
+                    foreach (var rate in activityToEdit.RatingList){
+                        ratingTotaled =+ rate;
+                    }
+                    activityToEdit.Rating = ratingTotaled / activityToEdit.RatingList.Count;
+                    activityToEdit.Review = activity.Review;
+
                     _context.Update(activityToEdit);
                     _context.SaveChanges();
                     return RedirectToAction("DayDetails");

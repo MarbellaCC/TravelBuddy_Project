@@ -14,8 +14,14 @@ namespace TravelBuddy.Models
         [DataType(DataType.Time)]
         public DateTime? Time { get; set; }
         public string PlaceName { get; set; }
-        [Range(0,5)]
-        public float Rating { get; set; }
+        [Range(0, 5)]
+        [NotMapped]
+        public List<double> RatingList { get; set; }
+        public double RatingAdded { get; set; }
+        public double Rating { get; set; }
+        public string Review { get; set; }
+        public float GoogleRating { get; set; }
+        public string Address { get; set; }
         [Display(Name = "Max Distane")]
         public double? MaxDistance { get; set; }
         [Display(Name = "Type of Activity")]

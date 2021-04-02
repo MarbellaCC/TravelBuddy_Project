@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.PlaceName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Rating)
+                @Html.DisplayNameFor(model => model.GoogleRating)
             </th>
             <th></th>
         </tr>
@@ -35,12 +35,13 @@
                 @Html.DisplayFor(modelItem => item.PlaceName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Rating)
+                @Html.DisplayFor(modelItem => item.GoogleRating)
             </td>
             <td>
                 <a asp-action="EditActivity" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="ActivityDetails" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="DeleteActivity" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="DeleteActivity" asp-route-id="@item.Id">Delete</a> |
+                <a asp-action="RateActivity" asp-route-id="@item.Id">Rate</a>
             </td>
         </tr>
 }

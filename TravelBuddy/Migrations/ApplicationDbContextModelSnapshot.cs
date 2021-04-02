@@ -48,8 +48,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "af74ecf7-9c33-413c-9f07-861f45803ee9",
-                            ConcurrencyStamp = "0068f658-65b5-4ab6-8c5a-7ba484bb9058",
+                            Id = "a800a95d-33f2-4180-9a70-d9b548bc298c",
+                            ConcurrencyStamp = "1402b760-9350-4407-9745-8627cc1edd72",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -237,8 +237,14 @@ namespace TravelBuddy.Migrations
                     b.Property<float>("ActivityLng")
                         .HasColumnType("real");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DayId")
                         .HasColumnType("int");
+
+                    b.Property<float>("GoogleRating")
+                        .HasColumnType("real");
 
                     b.Property<double?>("MaxDistance")
                         .HasColumnType("float");
@@ -246,8 +252,14 @@ namespace TravelBuddy.Migrations
                     b.Property<string>("PlaceName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<float>("Rating")
-                        .HasColumnType("real");
+                    b.Property<double>("Rating")
+                        .HasColumnType("float");
+
+                    b.Property<double>("RatingAdded")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Review")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("Time")
                         .HasColumnType("datetime2");
