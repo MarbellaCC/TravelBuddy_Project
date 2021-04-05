@@ -1,17 +1,20 @@
-﻿@model IEnumerable<TravelBuddy.Models.ActivityResult>
+﻿@model IEnumerable<TravelBuddy.Models.Lodging>
 
 @{
-    ViewData["Title"] = "ResultList";
+    ViewData["Title"] = "TravelerLodging";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Activity List</h1>
+<h1>Lodging</h1>
 
+<p>
+    <a asp-action="CreateLodging">Create New</a>
+</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.PlaceName)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.GoogleRating)
@@ -26,7 +29,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.PlaceName)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GoogleRating)
@@ -35,10 +38,11 @@
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                <a asp-action="AddActivity" asp-route-id="@item.Id">Add</a> |
-                <a asp-action="ResultDetails" asp-route-id="@item.Id">Details</a>
+                <a asp-action="LodgingDetails" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="DeleteLodging" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
     </tbody>
 </table>
+

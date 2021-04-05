@@ -1,14 +1,14 @@
-﻿@model TravelBuddy.Models.Lodging
+﻿@model TravelBuddy.Models.LodgingResult
 
 @{
-    ViewData["Title"] = "LodgingDetails";
+    ViewData["Title"] = "LodgingResultDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>LodgingDetails</h1>
+<h1>LodgingResultDetails</h1>
 
 <div>
-    <h4>Lodging</h4>
+    <h4>LodgingResult</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -29,11 +29,24 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Address)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LodgingLat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LodgingLat)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.LodgingLng)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.LodgingLng)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="LodgingResultList">Back to List</a>
 </div>
+
 <div id="floating-panel">
     <b>Start: </b>
     <input id="start" type="text" />

@@ -573,11 +573,11 @@ namespace TravelBuddy.Controllers
                 hotel.TravelerId = traveler.Id;
                 _context.Lodgings.Add(hotel);
                 _context.SaveChanges();
-                return RedirectToAction("HotelList");
+                return RedirectToAction("LodgingResultList");
             }
             return View(hotel);
         }
-        public async Task<IActionResult> LodgingResults()
+        public async Task<IActionResult> LodgingResultList()
         {
             var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -677,15 +677,59 @@ namespace TravelBuddy.Controllers
             lodging.LodgingLng = lodgingResult.LodgingLng;
             _context.Update(lodging);
             _context.SaveChanges();
-            return RedirectToAction("Lodging");
+            return RedirectToAction("TravelerLodging");
         }
-
-        public ActionResult LodgingDetails()
+        public ActionResult TravelerLodging()
         {
             var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).SingleOrDefault();
-            var lodging = _context.Lodgings.Where(h => h.TravelerId == traveler.Id).SingleOrDefault();
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var lodging = _context.Lodgings.Where(l => l.TravelerId == traveler.Id);
+            return View(lodging);
+        }
+        public async Task<IActionResult> DeleteLodging(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var lodging = await _context.Lodgings
+                .Include(l => l.Traveler)
+                .FirstOrDefaultAsync(l => l.Id == id);
+            if (lodging == null)
+            {
+                return NotFound();
+            }
+
+            return View(lodging);
+        }
+
+        // POST: Days/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteLodging(int id)
+        {
+            var lodging = await _context.Lodgings.FindAsync(id);
+            _context.Lodgings.Remove(lodging);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(TravelerLodging));
+        }
+        public ActionResult LodgingResultDetails(int? id)
+        {
+            var result = _context.LodgingResults.Find(id);
+            ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return View(result);
+        }
+
+        public ActionResult LodgingDetails(int? id)
+        {
+            var lodging = _context.Lodgings.Find(id);
             ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
             if (lodging == null)
             {
