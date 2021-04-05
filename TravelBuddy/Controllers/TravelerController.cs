@@ -35,7 +35,7 @@ namespace TravelBuddy.Controllers
             {
                 return RedirectToAction("Create");
             }
-            var travelerDays = _context.Days.Where(d => d.TravelerId == traveler.Id);
+            var travelerDays = _context.Days.Where(d => d.TravelerId == traveler.Id).OrderBy(d => d.Date);
             return View(travelerDays);
         }
         public ActionResult DayDetails() 
