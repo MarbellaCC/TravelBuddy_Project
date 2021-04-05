@@ -1,21 +1,21 @@
-﻿@model TravelBuddy.Models.Lodging
+﻿@model TravelBuddy.Models.ActivityResult
 
 @{
-    ViewData["Title"] = "LodgingDetails";
+    ViewData["Title"] = "ResultDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>LodgingDetails</h1>
+<h1>ResultDetails</h1>
 
 <div>
-    <h4>Lodging</h4>
+    <h4>ActivityResult</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.PlaceName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.PlaceName)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.GoogleRating)
@@ -29,10 +29,22 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Address)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ActivityLat)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ActivityLat)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.ActivityLng)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ActivityLng)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="ResultList">Back to Results</a>
 </div>
 <div id="floating-panel">
     <b>Start: </b>
@@ -65,7 +77,7 @@
         const directionsRenderer = new google.maps.DirectionsRenderer();
         const map = new google.maps.Map(document.getElementById("map"), {
             zoom: 15,
-            center: { lat: @Model.LodgingLat, lng: @Model.LodgingLng},
+            center: { lat: @Model.ActivityLat, lng: @Model.ActivityLng},
         });
         directionsRenderer.setMap(map);
 
@@ -79,7 +91,7 @@
             .getElementById("end")
             .addEventListener("change", onChangeHandler);
         var marker = new google.maps.Marker({
-            position: { lat: @Model.LodgingLat, lng: @Model.LodgingLng},
+            position: { lat: @Model.ActivityLat, lng: @Model.ActivityLng},
             map: map
         });
     }
@@ -89,7 +101,7 @@
                 origin: {
                     query: document.getElementById("start").value,
                 },
-                destination: { lat: @Model.LodgingLat, lng: @Model.LodgingLng},
+                destination: { lat: @Model.ActivityLat, lng: @Model.ActivityLng},
                 travelMode: google.maps.TravelMode.DRIVING,
             },
             (response, status) => {

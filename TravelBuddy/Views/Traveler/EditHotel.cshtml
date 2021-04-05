@@ -1,33 +1,33 @@
-﻿@model TravelBuddy.Models.Hotel
+﻿@model TravelBuddy.Models.Lodging
 
 @{
-    ViewData["Title"] = "EditHotel";
+    ViewData["Title"] = "EditLodging";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>EditHotel</h1>
+<h1>Edit Lodging</h1>
 
-<h4>Hotel</h4>
+<h4>Lodging</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="EditHotel">
+        <form asp-action="EditLodging">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Lodging" class="control-label"></label>
-                <select asp-for="Lodging" class="form-control">
+                <label asp-for="LodgingType" class="control-label"></label>
+                <select asp-for="LodgingType" class="form-control">
                     <option value="None">Select Lodging</option>
                     <option value="Hotel">Hotel</option>
                     <option value="Motel">Motel</option>
                     <option value="Hostel">Hostel</option>
                 </select>
-                <span asp-validation-for="Lodging" class="text-danger"></span>
+                <span asp-validation-for="LodgingType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="HotelMaxDistance" class="control-label"></label>
-                <input asp-for="HotelMaxDistance" class="form-control" />
-                <span asp-validation-for="HotelMaxDistance" class="text-danger"></span>
+                <label asp-for="MaxDistance" class="control-label"></label>
+                <input asp-for="MaxDistance" class="form-control" />
+                <span asp-validation-for="MaxDistance" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

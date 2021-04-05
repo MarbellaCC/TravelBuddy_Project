@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TravelBuddy.Models.Hotel>
+﻿@model IEnumerable<TravelBuddy.Models.Lodging>
 
 @{
     ViewData["Title"] = "HotelList";
@@ -14,25 +14,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.HotelName)
+                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HotelGoogleRating)
+                @Html.DisplayNameFor(model => model.GoogleRating)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HotelAddress)
+                @Html.DisplayNameFor(model => model.Address)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HotelLat)
+                @Html.DisplayNameFor(model => model.LodgingLat)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HotelLng)
+                @Html.DisplayNameFor(model => model.LodgingLng)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Lodging)
+                @Html.DisplayNameFor(model => model.LodgingType)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.HotelMaxDistance)
+                @Html.DisplayNameFor(model => model.MaxDistance)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Traveler)
@@ -44,25 +44,25 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.HotelName)
+                @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HotelGoogleRating)
+                @Html.DisplayFor(modelItem => item.GoogleRating)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HotelAddress)
+                @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HotelLat)
+                @Html.DisplayFor(modelItem => item.LodgingLat)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HotelLng)
+                @Html.DisplayFor(modelItem => item.LodgingLng)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Lodging)
+                @Html.DisplayFor(modelItem => item.LodgingType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.HotelMaxDistance)
+                @Html.DisplayFor(modelItem => item.MaxDistance)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Traveler.Id)

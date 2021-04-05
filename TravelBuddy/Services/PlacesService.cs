@@ -15,10 +15,10 @@ namespace TravelBuddy.Services
         {
 
         }
-        public async Task<Locations> GetHotels(Traveler traveler, Hotel hotel)
+        public async Task<Locations> GetLodging(Traveler traveler, Lodging lodging)
         {
             HttpClient client = new HttpClient();
-            HttpResponseMessage response = await client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={traveler.Latitude},{traveler.Longitude}&radius={hotel.HotelMaxDistance}&keyword={hotel.Lodging}&key={APIKeys.GOOGLE_API_KEY}");
+            HttpResponseMessage response = await client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={traveler.Latitude},{traveler.Longitude}&radius={lodging.MaxDistance}&keyword={lodging.LodgingType}&key={APIKeys.GOOGLE_API_KEY}");
             if (response.IsSuccessStatusCode)
             {
                 string json = response.Content.ReadAsStringAsync().Result;

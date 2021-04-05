@@ -7,18 +7,18 @@ using System.Threading.Tasks;
 
 namespace TravelBuddy.Models
 {
-    public class Hotel
+    public class Lodging
     {
         [Key]
         public int Id { get; set; }
-        public string HotelName { get; set; }
-        public string HotelPhotos { get; set; }
-        public float HotelGoogleRating { get; set; }
-        public string HotelAddress { get; set; }
-        public float HotelLat { get; set; }
-        public float HotelLng { get; set; }
-        public string Lodging { get; set; }
-        public string HotelMaxDistance { get; set; }
+        public string Name { get; set; }
+        public string Photos { get; set; }
+        public float GoogleRating { get; set; }
+        public string Address { get; set; }
+        public float LodgingLat { get; set; }
+        public float LodgingLng { get; set; }
+        public string LodgingType { get; set; }
+        public string MaxDistance { get; set; }
         [ForeignKey("Traveler")]
         public int TravelerId { get; set; }
         public Traveler Traveler { get; set; }

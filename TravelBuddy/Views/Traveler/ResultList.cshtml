@@ -1,0 +1,59 @@
+﻿@model IEnumerable<TravelBuddy.Models.ActivityResult>
+
+@{
+    ViewData["Title"] = "ResultList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>ResultList</h1>
+
+<p>
+    @*<a asp-action="CreateResult">Create</a>*@
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PlaceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GoogleRating)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityLat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityLng)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlaceName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GoogleRating)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityLat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityLng)
+            </td>
+            <td>
+                <a asp-action="AddActivity" asp-route-id="@item.Id">Add</a> |
+                <a asp-action="ResultDetails" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

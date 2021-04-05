@@ -10,11 +10,11 @@ namespace TravelBuddy.Models
     {
         [NotMapped]
         public object[] html_attributions { get; set; }
-        public Result[] results { get; set; }
+        public GoogleResult[] results { get; set; }
         public string status { get; set; }
     }
 
-    public class Result
+    public class GoogleResult
     {
         public string business_status { get; set; }
         public Geometry geometry { get; set; }

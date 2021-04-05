@@ -23,6 +23,8 @@ namespace TravelBuddy.Data
         public DbSet<Interest>Interests { get; set; }
         public DbSet<Day>Days { get; set; }
         public DbSet<Activity> Activities { get; set; }
-        public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Lodging> Lodgings { get; set; }
+        public DbSet<ActivityResult> ActivityResults { get; set; }
+        public DbSet<LodgingResult> LodgingResults { get; set; }
     }
 }

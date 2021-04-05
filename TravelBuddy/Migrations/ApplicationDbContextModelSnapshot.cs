@@ -48,8 +48,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "a800a95d-33f2-4180-9a70-d9b548bc298c",
-                            ConcurrencyStamp = "1402b760-9350-4407-9745-8627cc1edd72",
+                            Id = "566334a7-3ade-4e2f-b3cc-1695629530c8",
+                            ConcurrencyStamp = "17fa27ec-be92-4f15-bbcb-f552e75ea79f",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -277,6 +277,38 @@ namespace TravelBuddy.Migrations
                     b.ToTable("Activities");
                 });
 
+            modelBuilder.Entity("TravelBuddy.Models.ActivityResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ActivityId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("ActivityLat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("ActivityLng")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("GoogleRating")
+                        .HasColumnType("real");
+
+                    b.Property<string>("PlaceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActivityId");
+
+                    b.ToTable("ActivityResults");
+                });
+
             modelBuilder.Entity("TravelBuddy.Models.Day", b =>
                 {
                     b.Property<int>("Id")
@@ -300,47 +332,6 @@ namespace TravelBuddy.Migrations
                     b.ToTable("Days");
                 });
 
-            modelBuilder.Entity("TravelBuddy.Models.Hotel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("HotelAddress")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("HotelGoogleRating")
-                        .HasColumnType("real");
-
-                    b.Property<float>("HotelLat")
-                        .HasColumnType("real");
-
-                    b.Property<float>("HotelLng")
-                        .HasColumnType("real");
-
-                    b.Property<string>("HotelMaxDistance")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HotelName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HotelPhotos")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Lodging")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TravelerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TravelerId");
-
-                    b.ToTable("Hotels");
-                });
-
             modelBuilder.Entity("TravelBuddy.Models.Interest", b =>
                 {
                     b.Property<int>("Id")
@@ -359,6 +350,79 @@ namespace TravelBuddy.Migrations
                     b.HasIndex("TravelerId");
 
                     b.ToTable("Interests");
+                });
+
+            modelBuilder.Entity("TravelBuddy.Models.Lodging", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("GoogleRating")
+                        .HasColumnType("real");
+
+                    b.Property<float>("LodgingLat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("LodgingLng")
+                        .HasColumnType("real");
+
+                    b.Property<string>("LodgingType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MaxDistance")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Photos")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TravelerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TravelerId");
+
+                    b.ToTable("Lodgings");
+                });
+
+            modelBuilder.Entity("TravelBuddy.Models.LodgingResult", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<float>("GoogleRating")
+                        .HasColumnType("real");
+
+                    b.Property<int>("LodgingId")
+                        .HasColumnType("int");
+
+                    b.Property<float>("LodgingLat")
+                        .HasColumnType("real");
+
+                    b.Property<float>("LodgingLng")
+                        .HasColumnType("real");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LodgingId");
+
+                    b.ToTable("LodgingResults");
                 });
 
             modelBuilder.Entity("TravelBuddy.Models.Traveler", b =>
@@ -462,16 +526,16 @@ namespace TravelBuddy.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TravelBuddy.Models.Day", b =>
+            modelBuilder.Entity("TravelBuddy.Models.ActivityResult", b =>
                 {
-                    b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
+                    b.HasOne("TravelBuddy.Models.Activity", "Activity")
                         .WithMany()
-                        .HasForeignKey("TravelerId")
+                        .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TravelBuddy.Models.Hotel", b =>
+            modelBuilder.Entity("TravelBuddy.Models.Day", b =>
                 {
                     b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
                         .WithMany()
@@ -485,6 +549,24 @@ namespace TravelBuddy.Migrations
                     b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
                         .WithMany()
                         .HasForeignKey("TravelerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TravelBuddy.Models.Lodging", b =>
+                {
+                    b.HasOne("TravelBuddy.Models.Traveler", "Traveler")
+                        .WithMany()
+                        .HasForeignKey("TravelerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TravelBuddy.Models.LodgingResult", b =>
+                {
+                    b.HasOne("TravelBuddy.Models.Lodging", "Lodging")
+                        .WithMany()
+                        .HasForeignKey("LodgingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

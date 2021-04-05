@@ -1,32 +1,32 @@
-﻿@model TravelBuddy.Models.Hotel
+﻿@model TravelBuddy.Models.Lodging
 
 @{
-    ViewData["Title"] = "CreateHotel";
+    ViewData["Title"] = "CreateLodging";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>CreateHotel</h1>
+<h1>Create Lodging</h1>
 
-<h4>Hotel</h4>
+<h4>Lodging</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="CreateHotel">
+        <form asp-action="CreateLodging">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-            <label asp-for="Lodging" class="control-label"></label>
-            <select asp-for="Lodging" class="form-control">
+            <label asp-for="LodgingType" class="control-label"></label>
+            <select asp-for="LodgingType" class="form-control">
                 <option value="None">Select Lodging</option>
                 <option value="Hotel">Hotel</option>
                 <option value="Motel">Motel</option>
                 <option value="Hostel">Hostel</option>
             </select>
-            <span asp-validation-for="Lodging" class="text-danger"></span>
+            <span asp-validation-for="LodgingType" class="text-danger"></span>
         </div>
             <div class="form-group">
-                <label asp-for="HotelMaxDistance" class="control-label"></label>
-                <input asp-for="HotelMaxDistance" class="form-control" />
-                <span asp-validation-for="HotelMaxDistance" class="text-danger"></span>
+                <label asp-for="MaxDistance" class="control-label"></label>
+                <input asp-for="MaxDistance" class="form-control" />
+                <span asp-validation-for="MaxDistance" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
@@ -36,7 +36,7 @@
 </div>
 
 <div>
-    <a asp-action="HotelList">Back to List</a>
+    <a asp-action="LodgingList">Back to List</a>
 </div>
 
 @section Scripts {
