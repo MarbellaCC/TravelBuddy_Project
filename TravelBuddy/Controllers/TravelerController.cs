@@ -168,6 +168,26 @@ namespace TravelBuddy.Controllers
             }
             return View(activity);
         }
+        public ActionResult CreateInterestActivity()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateInterestActivity(Activity activity)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                activity.DayId = day.Id;
+                _context.Activities.Add(activity);
+                _context.SaveChanges();
+                return RedirectToAction("InterestResultList");
+            }
+            return View(activity);
+        }
         public async Task<IActionResult> ResultList()
         {
             var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -177,82 +197,48 @@ namespace TravelBuddy.Controllers
             if (ModelState.IsValid)
             {
                 var locations = await _googlePlacesService.GetActivity(traveler, activity);
-                ActivityResult result = new ActivityResult();
-                ActivityResult result1 = new ActivityResult();
-                ActivityResult result2 = new ActivityResult();
-                ActivityResult result3 = new ActivityResult();
-                ActivityResult result4 = new ActivityResult();
+                List<ActivityResult> results = new List<ActivityResult>();
                 for (int i = 0; i < locations.results.Length; i++)
                 {
-                    if (i == 0)
-                    {
-                        result.ActivityId = activity.Id;
-                        result.PlaceName = locations.results[i].name;
-                        result.GoogleRating = locations.results[i].rating;
-                        result.ActivityLat = locations.results[i].geometry.location.lat;
-                        result.ActivityLng = locations.results[i].geometry.location.lng;
-                        result.Address = locations.results[i].vicinity;
-                        _context.ActivityResults.Add(result);
-                        _context.SaveChanges();
-                        
-                    }
-                    else if(i == 1)
-                    {
-                        result1.ActivityId = activity.Id;
-                        result1.PlaceName = locations.results[i].name;
-                        result1.GoogleRating = locations.results[i].rating;
-                        result1.ActivityLat = locations.results[i].geometry.location.lat;
-                        result1.ActivityLng = locations.results[i].geometry.location.lng;
-                        result1.Address = locations.results[i].vicinity;
-                        _context.ActivityResults.Add(result1);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 2)
-                    {
-                        result2.ActivityId = activity.Id;
-                        result2.PlaceName = locations.results[i].name;
-                        result2.GoogleRating = locations.results[i].rating;
-                        result2.ActivityLat = locations.results[i].geometry.location.lat;
-                        result2.ActivityLng = locations.results[i].geometry.location.lng;
-                        result2.Address = locations.results[i].vicinity;
-                        _context.ActivityResults.Add(result2);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 2)
-                    {
-                        result2.ActivityId = activity.Id;
-                        result2.PlaceName = locations.results[i].name;
-                        result2.GoogleRating = locations.results[i].rating;
-                        result2.ActivityLat = locations.results[i].geometry.location.lat;
-                        result2.ActivityLng = locations.results[i].geometry.location.lng;
-                        result2.Address = locations.results[i].vicinity;
-                        _context.ActivityResults.Add(result2);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 3)
-                    {
-                        result3.ActivityId = activity.Id;
-                        result3.PlaceName = locations.results[i].name;
-                        result3.GoogleRating = locations.results[i].rating;
-                        result3.ActivityLat = locations.results[i].geometry.location.lat;
-                        result3.ActivityLng = locations.results[i].geometry.location.lng;
-                        result3.Address = locations.results[i].vicinity;
-                        _context.ActivityResults.Add(result3);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 4)
-                    {
-                        result4.ActivityId = activity.Id;
-                        result4.PlaceName = locations.results[i].name;
-                        result4.GoogleRating = locations.results[i].rating;
-                        result4.ActivityLat = locations.results[i].geometry.location.lat;
-                        result4.ActivityLng = locations.results[i].geometry.location.lng;
-                        result4.Address = locations.results[i].vicinity;
-                        _context.ActivityResults.Add(result4);
-                        _context.SaveChanges();
-                    }
+                    ActivityResult result = new ActivityResult();
+                    result.ActivityId = activity.Id;
+                    result.PlaceName = locations.results[i].name;
+                    result.GoogleRating = locations.results[i].rating;
+                    result.ActivityLat = locations.results[i].geometry.location.lat;
+                    result.ActivityLng = locations.results[i].geometry.location.lng;
+                    result.Address = locations.results[i].vicinity;
+                    _context.ActivityResults.Add(result);
+                    _context.SaveChanges();
+                    results.Add(result);
                 }
-                var results = _context.ActivityResults.Where(r => r.ActivityId == activity.Id);
+                return View(results);
+            }
+            return View();
+        }
+        public async Task<IActionResult> InterestResultList()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+            var interests = _context.Interests.Where(i => i.TravelerId == traveler.Id).FirstOrDefault();
+            var activity = _context.Activities.Where(a => a.DayId == day.Id && a.PlaceName == null).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                var locations = await _googlePlacesService.GetInterestActivity(traveler, activity, interests);
+                List<ActivityResult> results = new List<ActivityResult>();
+                for (int i = 0; i < locations.results.Length; i++)
+                {
+                    ActivityResult result = new ActivityResult();
+                    result.ActivityId = activity.Id;
+                    result.PlaceName = locations.results[i].name;
+                    result.GoogleRating = locations.results[i].rating;
+                    result.ActivityLat = locations.results[i].geometry.location.lat;
+                    result.ActivityLng = locations.results[i].geometry.location.lng;
+                    result.Address = locations.results[i].vicinity;
+                    _context.ActivityResults.Add(result);
+                    _context.SaveChanges();
+                    results.Add(result);
+                }
                 return View(results);
             }
             return View();
@@ -271,6 +257,17 @@ namespace TravelBuddy.Controllers
             return RedirectToAction("DayDetails");
         }
         public ActionResult ResultDetails(int? id)
+        {
+            var result = _context.ActivityResults.Find(id);
+            ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            return View(result);
+        }
+        public ActionResult InterestResultDetails(int? id)
         {
             var result = _context.ActivityResults.Find(id);
             ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
@@ -378,51 +375,7 @@ namespace TravelBuddy.Controllers
             }
             return View(day);
         }
-        public ActionResult EditActivity(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            var activity = _context.Activities.Find(id);
-            if (activity == null)
-            {
-                return NotFound();
-            }
-            return View(activity);
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditActivity(int id, Activity activity)
-        {
-            if (id != activity.Id)
-            {
-                return NotFound();
-            }
-            else
-            {
-                if (ModelState.IsValid)
-                {
-                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
-                    var activityToEdit = _context.Activities.Find(id);
-                    activityToEdit.MaxDistance = activity.MaxDistance;
-                    activityToEdit.Time = activity.Time;
-                    activityToEdit.TypeOfActivity = activity.TypeOfActivity;
-                    activityToEdit.TypeOfAdventureOrRestaurant = activity.TypeOfAdventureOrRestaurant;
-                    Locations locations = await _googlePlacesService.GetActivity(traveler, activityToEdit);
-                    activityToEdit.PlaceName = locations.results[0].name;
-                    activityToEdit.GoogleRating = locations.results[0].rating;
-                    activityToEdit.ActivityLat = locations.results[0].geometry.location.lat;
-                    activityToEdit.ActivityLng = locations.results[0].geometry.location.lng;
-                    activityToEdit.Address = locations.results[0].vicinity;
-                    _context.Update(activityToEdit);
-                    _context.SaveChanges();
-                    return RedirectToAction("DayDetails");
-                }
-            }
-            return View(activity);
-        }
+        
         public ActionResult RateActivity(int? id)
         {
             if (id == null)
@@ -448,19 +401,14 @@ namespace TravelBuddy.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
-                    var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
                     var activityToEdit = _context.Activities.Find(id);
                     activityToEdit.RatingAdded = activity.RatingAdded;
-                    activityToEdit.RatingList.Add(activity.RatingAdded);
-                    double ratingTotaled = 0;
-                    foreach (var rate in activityToEdit.RatingList){
-                        ratingTotaled =+ rate;
-                    }
-                    activityToEdit.Rating = ratingTotaled / activityToEdit.RatingList.Count;
-                    activityToEdit.Review = activity.Review;
 
+                    //double ratingTotaled = 0;
+                    //foreach (var rate in activityToEdit.RatingList){
+                    //    ratingTotaled =+ rate;
+                    //}
+                    //activityToEdit.Rating = ratingTotaled / activityToEdit.RatingList.Count;
                     _context.Update(activityToEdit);
                     _context.SaveChanges();
                     return RedirectToAction("DayDetails");
@@ -586,82 +534,20 @@ namespace TravelBuddy.Controllers
             if (ModelState.IsValid)
             {
                 var locations = await _googlePlacesService.GetLodging(traveler, lodging);
-                LodgingResult result = new LodgingResult();
-                LodgingResult result1 = new LodgingResult();
-                LodgingResult result2 = new LodgingResult();
-                LodgingResult result3 = new LodgingResult();
-                LodgingResult result4 = new LodgingResult();
+                List<LodgingResult> results = new List<LodgingResult>();
                 for (int i = 0; i < locations.results.Length; i++)
                 {
-                    if (i == 0)
-                    {
-                        result.LodgingId = lodging.Id;
-                        result.Name = locations.results[i].name;
-                        result.GoogleRating = locations.results[i].rating;
-                        result.LodgingLat = locations.results[i].geometry.location.lat;
-                        result.LodgingLng = locations.results[i].geometry.location.lng;
-                        result.Address = locations.results[i].vicinity;
-                        _context.LodgingResults.Add(result);
-                        _context.SaveChanges();
-
-                    }
-                    else if (i == 1)
-                    {
-                        result1.LodgingId = lodging.Id;
-                        result1.Name = locations.results[i].name;
-                        result1.GoogleRating = locations.results[i].rating;
-                        result1.LodgingLat = locations.results[i].geometry.location.lat;
-                        result1.LodgingLng = locations.results[i].geometry.location.lng;
-                        result1.Address = locations.results[i].vicinity;
-                        _context.LodgingResults.Add(result1);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 2)
-                    {
-                        result2.LodgingId = lodging.Id;
-                        result2.Name = locations.results[i].name;
-                        result2.GoogleRating = locations.results[i].rating;
-                        result2.LodgingLat = locations.results[i].geometry.location.lat;
-                        result2.LodgingLng = locations.results[i].geometry.location.lng;
-                        result2.Address = locations.results[i].vicinity;
-                        _context.LodgingResults.Add(result2);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 2)
-                    {
-                        result2.LodgingId = lodging.Id;
-                        result2.Name = locations.results[i].name;
-                        result2.GoogleRating = locations.results[i].rating;
-                        result2.LodgingLat = locations.results[i].geometry.location.lat;
-                        result2.LodgingLng = locations.results[i].geometry.location.lng;
-                        result2.Address = locations.results[i].vicinity;
-                        _context.LodgingResults.Add(result2);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 3)
-                    {
-                        result3.LodgingId = lodging.Id;
-                        result3.Name = locations.results[i].name;
-                        result3.GoogleRating = locations.results[i].rating;
-                        result3.LodgingLat = locations.results[i].geometry.location.lat;
-                        result3.LodgingLng = locations.results[i].geometry.location.lng;
-                        result3.Address = locations.results[i].vicinity;
-                        _context.LodgingResults.Add(result3);
-                        _context.SaveChanges();
-                    }
-                    else if (i == 4)
-                    {
-                        result4.LodgingId = lodging.Id;
-                        result4.Name = locations.results[i].name;
-                        result4.GoogleRating = locations.results[i].rating;
-                        result4.LodgingLat = locations.results[i].geometry.location.lat;
-                        result4.LodgingLng = locations.results[i].geometry.location.lng;
-                        result4.Address = locations.results[i].vicinity;
-                        _context.LodgingResults.Add(result4);
-                        _context.SaveChanges();
-                    }
+                    LodgingResult result = new LodgingResult();
+                    result.LodgingId = lodging.Id;
+                    result.Name = locations.results[i].name;
+                    result.GoogleRating = locations.results[i].rating;
+                    result.LodgingLat = locations.results[i].geometry.location.lat;
+                    result.LodgingLng = locations.results[i].geometry.location.lng;
+                    result.Address = locations.results[i].vicinity;
+                    _context.LodgingResults.Add(result);
+                    _context.SaveChanges();
+                    results.Add(result);
                 }
-                var results = _context.LodgingResults.Where(r => r.LodgingId == lodging.Id);
                 return View(results);
             }
             return View();

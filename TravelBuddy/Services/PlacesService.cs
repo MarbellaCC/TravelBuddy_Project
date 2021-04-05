@@ -37,6 +37,16 @@ namespace TravelBuddy.Services
             }
             return null;
         }
-
+        public async Task<Locations> GetInterestActivity(Traveler traveler, Activity activity, Interest interests)
+        {
+            HttpClient client = new HttpClient();
+            HttpResponseMessage response = await client.GetAsync($"https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={traveler.Latitude},{traveler.Longitude}&radius={activity.MaxDistance}&type=tourist_attraction&keyword={interests.Name}&key={APIKeys.GOOGLE_API_KEY}");
+            if (response.IsSuccessStatusCode)
+            {
+                string json = response.Content.ReadAsStringAsync().Result;
+                return JsonConvert.DeserializeObject<Locations>(json);
+            }
+            return null;
+        }
     }
 }
