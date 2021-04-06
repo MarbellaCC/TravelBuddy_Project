@@ -15,11 +15,7 @@ namespace TravelBuddy.Models
         public DateTime? Time { get; set; }
         public string PlaceName { get; set; }
         [Range(0, 5)]
-        [NotMapped]
-        public List<double> RatingList { get; set; }
-        public double RatingAdded { get; set; }
         public double Rating { get; set; }
-        public string Review { get; set; }
         public float GoogleRating { get; set; }
         public string Address { get; set; }
         [Display(Name = "Max Distane")]
@@ -28,6 +24,7 @@ namespace TravelBuddy.Models
         public string TypeOfActivity { get; set; }
         [Display(Name = "Adventure/Restaurant Type")]
         public string TypeOfAdventureOrRestaurant { get; set; }
+        public string City { get; set; }
         public float ActivityLat { get; set; }
         public float ActivityLng { get; set; }
         [ForeignKey("Day")]

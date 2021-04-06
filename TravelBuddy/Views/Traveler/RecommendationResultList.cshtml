@@ -1,17 +1,20 @@
-﻿@model IEnumerable<TravelBuddy.Models.ActivityResult>
+﻿@model IEnumerable<TravelBuddy.Models.Activity>
 
 @{
-    ViewData["Title"] = "InterestResultList";
+    ViewData["Title"] = "RecommendationResultList";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Recommendations Based off your Interests</h1>
+<h1>Recommendations From Other Travelers!</h1>
 
 <table class="table">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.PlaceName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.GoogleRating)
@@ -21,6 +24,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ActivityLat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ActivityLng)
             </th>
             <th></th>
         </tr>
@@ -32,13 +38,22 @@
                 @Html.DisplayFor(modelItem => item.PlaceName)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.Rating)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.GoogleRating)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
             </td>
             <td>
-                <a asp-action="ResultDetails" asp-route-id="@item.Id">Details</a>
+                @Html.DisplayFor(modelItem => item.ActivityLat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ActivityLng)
+            </td>
+            <td>
+                <a asp-action="RecommendationDetails" asp-route-id="@item.Id">Details</a>
             </td>
         </tr>
 }

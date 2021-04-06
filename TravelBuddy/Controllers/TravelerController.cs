@@ -47,6 +47,63 @@ namespace TravelBuddy.Controllers
             var activitiesList = _context.Activities.Where(a => a.DayId == day.Id).OrderBy(a => a.Time);
             return View(activitiesList);
         }
+        public ActionResult RecommendationDetails(int? id)
+        {
+            var activity = _context.Activities.Find(id);
+            ViewData["APIKeys"] = APIKeys.GOOGLE_API_KEY;
+            if (activity == null)
+            {
+                return NotFound();
+            }
+
+            return View(activity);
+        }
+        public ActionResult CreateRecommendationActivity()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateRecommendationActivity(Activity activity)
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                activity.DayId = day.Id;
+                _context.Activities.Add(activity);
+                _context.SaveChanges();
+                return RedirectToAction("RecommendationResultList");
+            }
+            return View(activity);
+        }
+        public ActionResult RecommendationResultList()
+        {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault();
+            var activity = _context.Activities.Where(a => a.DayId == day.Id && a.PlaceName == null).FirstOrDefault();
+            var recommendation = _context.Activities.Where(a => a.City == traveler.DestinationCity);
+            return View(recommendation);
+        }
+        public ActionResult AddRecommendation(int id)
+        {
+            var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var traveler = _context.Travelers.Where(t => t.IdentityUserID == userId).FirstOrDefault();
+            var day = _context.Days.Where(d => d.TravelerId == traveler.Id).FirstOrDefault(); 
+            Activity recommendation = _context.Activities.Find(id);
+            Activity activity = _context.Activities.Where(a => a.DayId == day.Id && a.PlaceName == null).FirstOrDefault();
+            activity.Address = recommendation.Address;
+            activity.GoogleRating = recommendation.GoogleRating;
+            activity.PlaceName = recommendation.PlaceName;
+            activity.ActivityLat = recommendation.ActivityLat;
+            activity.ActivityLng = recommendation.ActivityLng;
+            _context.Update(activity);
+            _context.SaveChanges();
+            return RedirectToAction("DayDetails");
+        }
         public ActionResult InterestList()
         {
             var applicationDbContext = _context.Travelers.Include(t => t.IdentityUser);
@@ -402,13 +459,8 @@ namespace TravelBuddy.Controllers
                 if (ModelState.IsValid)
                 {
                     var activityToEdit = _context.Activities.Find(id);
-                    activityToEdit.RatingAdded = activity.RatingAdded;
-
-                    //double ratingTotaled = 0;
-                    //foreach (var rate in activityToEdit.RatingList){
-                    //    ratingTotaled =+ rate;
-                    //}
-                    //activityToEdit.Rating = ratingTotaled / activityToEdit.RatingList.Count;
+                    activityToEdit.Rating = activity.Rating;
+                    activityToEdit.City = activity.City;
                     _context.Update(activityToEdit);
                     _context.SaveChanges();
                     return RedirectToAction("DayDetails");

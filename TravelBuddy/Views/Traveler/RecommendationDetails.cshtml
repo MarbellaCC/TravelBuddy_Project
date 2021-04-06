@@ -1,13 +1,14 @@
-﻿@model TravelBuddy.Models.ActivityResult
+﻿@model TravelBuddy.Models.Activity
 
 @{
-    ViewData["Title"] = "InterestResultDetails";
+    ViewData["Title"] = "RecommendationDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h1>Details</h1>
 
 <div>
+    <h4>Activity</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -15,6 +16,12 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PlaceName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Rating)
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.GoogleRating)
@@ -43,8 +50,8 @@
     </dl>
 </div>
 <div>
-    <a asp-action="AddActivity" asp-route-id="@Model.Id">Add</a> |
-    <a asp-action="InterestResultList">Back to List</a>
+    <a asp-action="AddRecommendation" asp-route-id="@Model.Id">Add</a> |
+    <a asp-action="Recommendations">Back to List</a>
 </div>
 <div id="floating-panel">
     <b>Start: </b>
