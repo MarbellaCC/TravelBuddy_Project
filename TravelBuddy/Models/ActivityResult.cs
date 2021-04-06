@@ -11,10 +11,14 @@ namespace TravelBuddy.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name ="Name")]
         public string PlaceName { get; set; }
+        [Display(Name ="Google Rating")]
         public float GoogleRating { get; set; }
         public string Address { get; set; }
+        [Display(Name ="Latitude")]
         public float ActivityLat { get; set; }
+        [Display(Name ="Longitude")]
         public float ActivityLng { get; set; }
         [ForeignKey("Activity")]
         public int ActivityId { get; set; }

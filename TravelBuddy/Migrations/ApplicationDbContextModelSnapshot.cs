@@ -48,8 +48,8 @@ namespace TravelBuddy.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ef02523c-3a4c-4e21-a3fc-eca179f2cbf1",
-                            ConcurrencyStamp = "84e4b085-d59a-499e-9e1a-b34f650e76ce",
+                            Id = "bf40d6c1-dcf6-4b30-8383-4bee145e517d",
+                            ConcurrencyStamp = "858c8dba-17ba-4a87-bc2f-7f81abddb13e",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
